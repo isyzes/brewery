@@ -1,48 +1,48 @@
-## Пивоварня
+## Brewery
 
-# Cущности
+# Entities
 
-    Сотрудник:
+    Employee:
         id
-        имя
-        отдел
-        зп
-        работает/уволен
-        дата устройства на работу
-        дата увольнения
+        name
+        pepartment
+        wages
+        isSorks
+        dateStart
+        dateEnd
 
-    продукция:
+    Production:
         id
-        название
-        цвет
-        крепость
-        дата производства
-        срок годности(дней)
-        себестоимость
-        ингредиенты(какой и сколько)
+        name
+        color
+        fortress
+        dateManufacture
+        shelfLife(дней)
+        costPrice
+        ingredients(какой и сколько)
       
-    ингредиенты:
+    Ingredients:
         id
-        цена
-        производитель
-        название
+        name
+        price
+        manufacturer
     
     склад готовой продукции
-        вместимость
-        что и сколько в наличие
+        capacity
+        inReserve
         
     склад ингредиентов
-        вместимость
-        что и сколько в наличие
+        capacity
+        inReserve
         
-    потребители:
+    consumers:
         id
-        имя
+        name
         
-    заказы
+    orders
         id
-        цена
-        список товаров
+        price
+        products
  
 # User Stories
     GPB-1 Как потребитель я хочу купить товар
