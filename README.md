@@ -1,50 +1,66 @@
-## Brewery
+#### Brewery
 
-# Entities
+### Overview
+Project for the production and sale of beer
+Приложение для производства и реализации пива 
 
-    Employee:
-        id
-        name
-        department
-        wages
-        isWorks
-        dateStart
-        dateEnd
+### Entities
+Ниже перечисленный сущности в предметной области проекта и их поля.
 
-    Beer:
-        id
-        name
-        color
-        fortress
-        dateManufacture
-        shelfLife(дней)
-        costPrice
-        ingredients(какой и сколько)
-      
-    Ingredients:
-        id
-        name
-        price
-        manufacturer
+##Employee(Сотрудник):
+Сотрудник работающий на заводе или работающий ранее но был уволен.
+#Поля:
+    -id
+    -name
+    -department
+    -wages
+    -isWorks
+    -dateStart
+    -dateEnd
+#Связи:
     
-    склад готовой продукции
-        capacity
-        inReserve
         
-    склад ингредиентов
-        capacity
-        inReserve
+##Beer(Пиво):
+выпускаемая продукция
+#Поля:
+    -id
+    -name
+    -color
+    -fortress
+    -dateManufacture
+    -shelfLife
+    -costPrice
+    -ingredients
+#Связи:     
+
+##Ingredients(ингредиенты):
+ингредиенты необходимые для производства пива
+#Поля:
+    -id
+    -name
+    -price
+    -manufacturer
+#Связи:  
+  
+##Consumers:
+#Поля:
+    -id
+    -name  
+#Связи:   
+
+##Orders:
+#Поля:
+    -id
+    -price
+    -products   
+#Связи:  
+    
         
-    Consumers:
-        id
-        name
-        
-    Orders:
-        id
-        price
-        products
+    
+      
  
-# User Stories
+ 
+### User Stories
     GPB-1 Как потребитель я хочу купить товар
     Request post /buy/idПотребителя
         `{
