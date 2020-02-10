@@ -1,15 +1,15 @@
-#### Brewery
+# Brewery
 
-### Overview
+## Overview
 Project for the production and sale of beer
 Приложение для производства и реализации пива 
 
-### Entities
+## Entities
 Ниже перечисленный сущности в предметной области проекта и их поля.
 
-##Employee(Сотрудник):
+### Employee(Сотрудник):
 Сотрудник работающий на заводе или работающий ранее но был уволен.
-#Поля:
+#### Поля:
 * id
 * name
 * department
@@ -17,12 +17,12 @@ Project for the production and sale of beer
 * isWorks
 * dateStart
 * dateEnd
-#Связи:
+#### Связи:
 *
-           
-##Beer(Пиво):
+          
+### Beer(Пиво):
 выпускаемая продукция
-#Поля:
+#### Поля:
 * id
 * name
 * color
@@ -31,39 +31,35 @@ Project for the production and sale of beer
 * shelfLife
 * costPrice
 * ingredients
-#Связи:     
+#### Связи:     
 *
 
-##Ingredients(ингредиенты):
+### Ingredients(ингредиенты):
 ингредиенты необходимые для производства пива
-#Поля:
+#### Поля:
 * id
 * name
 * price
 * manufacturer
-#Связи:  
+#### Связи:  
 *
   
-##Consumers:
-#Поля:
+### Consumers:
+#### Поля:
 * id
 * name  
-#Связи:   
+#### Связи:   
 *
 
-##Orders:
-#Поля:
+### Orders:
+#### Поля:
 * id
 * price
 * products   
-#Связи:  
+#### Связи:  
 *   
         
-    
-      
- 
- 
-### User Stories
+## User Stories
     GPB-1 Как потребитель я хочу купить товар
     Request post /buy/idПотребителя
         `{
