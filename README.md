@@ -10,51 +10,54 @@ Project for the production and sale of beer
 ##Employee(Сотрудник):
 Сотрудник работающий на заводе или работающий ранее но был уволен.
 #Поля:
-    -id
-    -name
-    -department
-    -wages
-    -isWorks
-    -dateStart
-    -dateEnd
+* id
+* name
+* department
+* wages
+* isWorks
+* dateStart
+* dateEnd
 #Связи:
-    
-        
+*
+           
 ##Beer(Пиво):
 выпускаемая продукция
 #Поля:
-    -id
-    -name
-    -color
-    -fortress
-    -dateManufacture
-    -shelfLife
-    -costPrice
-    -ingredients
+* id
+* name
+* color
+* fortress
+* dateManufacture
+* shelfLife
+* costPrice
+* ingredients
 #Связи:     
+*
 
 ##Ingredients(ингредиенты):
 ингредиенты необходимые для производства пива
 #Поля:
-    -id
-    -name
-    -price
-    -manufacturer
+* id
+* name
+* price
+* manufacturer
 #Связи:  
+*
   
 ##Consumers:
 #Поля:
-    -id
-    -name  
+* id
+* name  
 #Связи:   
+*
 
 ##Orders:
 #Поля:
-    -id
-    -price
-    -products   
+* id
+* price
+* products   
 #Связи:  
-    
+*   
         
     
       
