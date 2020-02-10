@@ -61,7 +61,7 @@ Project for the production and sale of beer
 *      
 ## User Stories
 ### JTEP-1 Как Покупатель я хочу купить товар, чтобы обеспечить свой магазин
-`Request post /buy/idConsumers`
+`Request post /buy/{idConsumers}`
 
     [
         {"idBeer" : 1, "quantity" : 5},
@@ -86,7 +86,7 @@ Project for the production and sale of beer
     
     
 ### JTEP-2 как руководитель я хочу нанимать на работу сотрудников чтобы они выпускали продукцию
-`Request post /employee/take`
+`Request post /staff/employee/take`
 
     {"name" : "Ivanov Ivan Ivanovich", "department" : "Production", "wages" : 2020}
     
@@ -95,7 +95,7 @@ Project for the production and sale of beer
         {"id" : 1}
      
 ### JTEP-3 как руководитель я хочу увольнять сотрудников чтобы не нарушать законодательство
-`Request: PUT /staff/to-dismiss/idEmployee`
+`Request: PUT /staff/to-dismiss/{idEmployee}`
 
 `Response: 200 OK`
      
@@ -108,8 +108,7 @@ Project for the production and sale of beer
         {"id" : 5, "name" : "Adam Gordon", "department" : "Production", "wages" : 2500, "isWorks" : true, "dateStart" : "15.01.2018", "dateEnd" : null},
         {"id" : 2, "name" : "Carla Williams", "department" : "Production", "wages" : 5070, "isWorks" : true, "dateStart" : "15.01.2018", "dateEnd" : null},
         {"id" : 4, "name" : "Boris Jones", "department" : "Production", "wages" : 1500, "isWorks" : false, "dateStart" : "15.01.2018", "dateEnd" : "14.10.2019"}         
-     ]
-     
+     ] 
     
 ### JTEP-5 как руководитель я хочу получать список ассортимента товаров, чтобы выбрать какой изменить/удалить
 `Request get /beers/list`
@@ -124,7 +123,7 @@ Project for the production and sale of beer
     
 ### JTEP-6 как руководитель я хочу изменять информацию о товаре (обновить цену и имя пива), чтобы повысить уровень продаж
 
-`Request PUT /beers/{idBeer}`
+`Request PUT /beers/change/{idBeer}`
 
     {
         "name" : "Grimbergen",
