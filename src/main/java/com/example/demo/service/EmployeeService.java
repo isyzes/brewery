@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.Employee;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,9 +22,35 @@ public class EmployeeService {
     }
 
     private List<Employee> employeeList() {
-        Employee firstEmployee = new Employee(5, "Adam Gordon", "Production", 2500, true, LocalDate.of(2018, 1,15), null);
-        Employee secondEmployee = new Employee(2, "Carla Williams", "Production", 5070, true, LocalDate.of(2018, 1, 15), null);
-        Employee thirdEmployee = new Employee(4, "Boris Jones", "Production", 1500, false, LocalDate.of(2018, 1, 15), LocalDate.of(2019,10,14));
+        Employee firstEmployee = Employee.builder()
+                .id(5)
+                .name("Adam Gordon")
+                .department("Production")
+                .wages(2500)
+                .isWorks(true)
+                .dateStart(LocalDate.of(2018, 1,15))
+                .dateEnd(null)
+                .build();
+
+        Employee secondEmployee = Employee.builder()
+                .id(2)
+                .name("Carla Williams")
+                .department("Production")
+                .wages(5070)
+                .isWorks(true)
+                .dateStart( LocalDate.of(2018, 1, 15))
+                .dateEnd(null)
+                .build();
+
+        Employee thirdEmployee = Employee.builder()
+                .id(4)
+                .name("Boris Jones")
+                .department("Production")
+                .wages(1500)
+                .isWorks(false)
+                .dateStart(LocalDate.of(2018, 1, 15))
+                .dateEnd(LocalDate.of(2019,10,14))
+                .build();
         return List.of(firstEmployee, secondEmployee, thirdEmployee);
     }
 }

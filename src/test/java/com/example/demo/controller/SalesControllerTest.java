@@ -30,7 +30,7 @@ public class SalesControllerTest {
                 .andExpect(content().json("{" +
                         "\"id\":4," +
                         "\"price\":16.0," +
-                        "\"products\":[" +
+                        "\"orders\":[" +
                             "{\"id\":0,\"idBeer\":1,\"quantity\":5}," +
                             "{\"id\":0,\"idBeer\":4,\"quantity\":4}" +
                         "]}"));

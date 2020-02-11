@@ -19,9 +19,4 @@ public class Beer {
     private int shelfLife;//(дней)
     private int costPrice;//в копейках
     private List<OneIngredient> ingredients;
-
-    public static class OneIngredient {
-        private Ingredients ingredients;
-        private int quantity;
-    }
 }

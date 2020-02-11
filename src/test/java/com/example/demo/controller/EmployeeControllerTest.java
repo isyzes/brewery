@@ -23,7 +23,6 @@ public class EmployeeControllerTest {
         mockMvc.perform(post("/staff/employee/take")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\" : \"Ivanov Ivan Ivanovich\", \"department\" : \"Production\", \"wages\" : 2020}"))
-                // then
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{\n" +
                         "  \"id\" : 1\n" +
@@ -35,14 +34,12 @@ public class EmployeeControllerTest {
 
         mockMvc.perform(put("/staff/employee/to-dismiss/5")
                 .contentType(MediaType.APPLICATION_JSON))
-                // then
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testGetStaffListIsOk() throws Exception {
         mockMvc.perform(get("/staff/list"))
-                // then
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
                         "{" +
