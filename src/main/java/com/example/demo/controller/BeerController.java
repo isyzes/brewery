@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Beer;
+import com.example.demo.dto.FinishedBeer;
 import com.example.demo.service.BeerService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -25,5 +26,11 @@ public class BeerController {
     @GetMapping(value = "list")
     public List<Beer> getBeerList() {
         return service.getBeerList();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(value = "make/{idBeer}?quantity={quantity}")
+    public void makeBeer(@PathVariable long idBeer, @PathVariable int quantity) {
+        service.makeBeer(idBeer, quantity);
     }
 }

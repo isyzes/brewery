@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.Beer;
+import com.example.demo.dto.FinishedBeer;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -48,5 +49,13 @@ public class BeerService {
                 .costPrice(5756)
                 .build();
         return List.of(first, second, third);
+    }
+
+    public void makeBeer(long idBeer, int quantity) {
+        Beer beer = Beer.builder().id(idBeer).build();
+
+        FinishedBeer finishedBeer = FinishedBeer.builder().beer(beer).quantity(quantity).build();
+        //сделать запрос на скалад есть ли ингридиееты
+        //если есть вернуть отпрать на склад готовое пиво
     }
 }

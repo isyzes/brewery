@@ -34,7 +34,7 @@ public class BeerControllerTest {
                             "\"dateManufacture\":\"12.12.2020\"," +
                             "\"shelfLife\":25," +
                             "\"costPrice\":574," +
-                            "\"ingredients\":null" +
+                            "\"recipe\":null" +
                         "}," +
                         "{" +
                             "\"id\":2," +
@@ -44,7 +44,7 @@ public class BeerControllerTest {
                             "\"dateManufacture\":\"12.12.2020\"," +
                             "\"shelfLife\":25," +
                             "\"costPrice\":755," +
-                            "\"ingredients\":null" +
+                            "\"recipe\":null" +
                         "}," +
                         "{" +
                             "\"id\":3," +
@@ -54,7 +54,7 @@ public class BeerControllerTest {
                             "\"dateManufacture\":\"12.12.2020\"," +
                             "\"shelfLife\":35," +
                             "\"costPrice\":5756," +
-                            "\"ingredients\":null" +
+                            "\"recipe\":null" +
                         "}]"));
     }
 

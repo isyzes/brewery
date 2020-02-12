@@ -16,8 +16,8 @@ public class SalesController {
     private final SalesService service;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/buy/{idConsumers}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Order buyBeer(@RequestBody List<OneOrder> order, @PathVariable long idConsumers) {
-        return service.buyBeer(order, idConsumers);
+    @PostMapping(value = "/sell/{idConsumers}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Order buyBeer(@RequestBody List<OneOrder> listOrder, @PathVariable long idConsumers) {
+        return service.sellBeer(listOrder, idConsumers);
     }
 }

@@ -20,19 +20,20 @@ public class SalesControllerTest {
     @Test
     public void testBuyingBeerIsOk() throws Exception {
 
-        mockMvc.perform(post("/buy/4")
+        mockMvc.perform(post("/sell/4")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("[" +
-                        "{\"idBeer\" : 1, \"quantity\" : 5}," +
-                        "{\"idBeer\" : 4, \"quantity\" : 4}" +
+                        "{\"beer\" : {\"id\" : 1, \"costPrice\" : 5415}, \"quantity\" : 5}," +
+                        "{\"beer\" : {\"id\" : 4, \"costPrice\" : 9741}, \"quantity\" : 4}" +
                         "]"))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{" +
                         "\"id\":4," +
-                        "\"price\":16.0," +
-                        "\"orders\":[" +
-                            "{\"id\":0,\"idBeer\":1,\"quantity\":5}," +
-                            "{\"id\":0,\"idBeer\":4,\"quantity\":4}" +
+                        "\"price\":389.64," +
+                        "\"consumers\":{\"id\":4,\"name\":null}," +
+                        "\"listOrder\":[" +
+                            "{\"id\":0,\"beer\":{\"id\":1,\"name\":null,\"color\":null,\"fortress\":0.0,\"dateManufacture\":null,\"shelfLife\":0,\"costPrice\":5415,\"recipe\":null},\"quantity\":5}," +
+                            "{\"id\":0,\"beer\":{\"id\":4,\"name\":null,\"color\":null,\"fortress\":0.0,\"dateManufacture\":null,\"shelfLife\":0,\"costPrice\":9741,\"recipe\":null},\"quantity\":4}" +
                         "]}"));
     }
 }

@@ -18,5 +18,6 @@ public class Beer {
     private LocalDate dateManufacture;
     private int shelfLife;//(дней)
     private int costPrice;//в копейках
-    private List<OneIngredient> ingredients;
+    private List<OneIngredient> recipe;
 }
+

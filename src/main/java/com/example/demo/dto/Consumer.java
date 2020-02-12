@@ -1,11 +1,11 @@
 package com.example.demo.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class Ingredients {
+@Builder
+public class Consumer {
     private long id;
     private String name;
-    private double price;
-    private String manufacturer;
 }

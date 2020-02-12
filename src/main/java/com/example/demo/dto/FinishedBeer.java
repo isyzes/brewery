@@ -1,9 +1,12 @@
 package com.example.demo.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class OneIngredient {
-    private Ingredient ingredients;
+@Builder
+public class FinishedBeer {
+    private Beer beer;
     private int quantity;
+
 }
