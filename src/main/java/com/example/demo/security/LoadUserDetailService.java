@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LoadUserDetailService implements UserDetailsService {
 
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private final Map<String, String> inMemoryUsers = new HashMap<>();
 
@@ -30,7 +31,8 @@ public class LoadUserDetailService implements UserDetailsService {
         }
     }
 
-//    public void saveUser(final String username, final String password) {
-//        inMemoryUsers.put(username, passwordEncoder.encode(password));
-//    }
+    public void saveUser(final String username, final String password) {
+        inMemoryUsers.put(username, passwordEncoder.encode(password));
+    }
+
 }
