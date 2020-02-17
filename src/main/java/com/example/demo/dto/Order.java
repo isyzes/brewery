@@ -8,8 +8,6 @@ import java.util.List;
 @Data
 @Builder
 public class Order {
-    private long id;
-    private double price;
-    private Consumer consumers;
-    private List<OneOrder> listOrder;
+    private Consumer consumer;
+    private List<PartOrder> orders;
 }

@@ -6,12 +6,13 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class FinishedBeerEntity {
+public class PartOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @OneToOne
+    private long id;
+    @ManyToOne
     private BeerEntity beer;
     private int quantity;
 }
+
+

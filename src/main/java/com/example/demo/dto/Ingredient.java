@@ -6,6 +6,5 @@ import lombok.Data;
 public class Ingredient {
     private long id;
     private String name;
-    private double price;
-    private String manufacturer;
+    private int milligramsInStock;
 }

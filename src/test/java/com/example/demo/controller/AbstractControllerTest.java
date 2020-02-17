@@ -2,7 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UserSignInResponse;
 import com.example.demo.repository.BeerRepository;
-import com.example.demo.repository.WarehouseRepository;
+import com.example.demo.repository.IngredientRepository;
+import com.example.demo.repository.OrderRepository;
 import com.example.demo.security.LoadUserDetailService;
 import com.example.demo.security.Roles;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,9 +38,10 @@ public abstract class AbstractControllerTest {
 
     @MockBean
     protected BeerRepository beerRepository;
-
     @MockBean
-    protected WarehouseRepository warehouseRepository;
+    protected OrderRepository orderRepository;
+    @MockBean
+    protected IngredientRepository ingredientRepository;
 
     @SpyBean
     protected LoadUserDetailService loadUserDetailService;

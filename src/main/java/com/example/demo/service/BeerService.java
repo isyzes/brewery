@@ -1,15 +1,18 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.Beer;
-import com.example.demo.dto.FinishedBeer;
+import com.example.demo.dto.*;
 import com.example.demo.entity.BeerEntity;
-import com.example.demo.entity.FinishedBeerEntity;
-import com.example.demo.entity.WarehouseEntity;
+import com.example.demo.entity.OrderEntity;
+import com.example.demo.entity.PartRecipeEntity;
+import com.example.demo.mapper.BeerRequestMapper;
+import com.example.demo.mapper.OrderMapper;
+import com.example.demo.mapper.PartRecipeMapper;
 import com.example.demo.repository.BeerRepository;
-import com.example.demo.repository.FinishedBeerRepository;
-import com.example.demo.repository.WarehouseRepository;
+import com.example.demo.repository.OrderRepository;
 import lombok.AllArgsConstructor;
+import org.decimal4j.util.DoubleRounder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,38 +24,29 @@ import java.util.stream.Collectors;
 public class BeerService {
 
     private final BeerRepository beerRepository;
-    private final WarehouseRepository warehouseRepository;
-    private final FinishedBeerRepository finishedBeerRepository;
 
-    public Beer changeInformationBeer(Beer newBeer, long idBeer) {
-        Optional<BeerEntity> optionalBeer = beerRepository.findById(idBeer);
+    private final WarehouseService warehouseService;
+    private final ManagerService managerService;
 
-        if (optionalBeer.isEmpty()) {
-            //Кинуть Exception
+    private final BeerRequestMapper beerRequestMapper;
+    private final PartRecipeMapper partRecipeMapper;
+    private final OrderMapper orderMapper;
+    private final OrderRepository orderRepository;
 
-            return Beer.builder().build();
+    public Beer updatedBeer(final Beer newBeer, final long idBeer) {
+        final Optional<BeerEntity> optionalBeer = beerRepository.findById(idBeer);
+
+        if (optionalBeer.isPresent()) {
+            final BeerEntity beerEntity = optionalBeer.get();
+            updatedBeer(beerEntity, newBeer);
+
+            beerRepository.save(beerEntity);
+            return beerRequestMapper.destinationToSource(beerEntity);
         }
-        else {
-            BeerEntity beer = optionalBeer.get();
-            beer.setName(newBeer.getName());
-            beer.setCostPrice(newBeer.getCostPrice());
-
-            beerRepository.save(beer);
-
-            return Beer.builder()
-                    .id(beer.getId())
-                    .name(beer.getName())
-                    .color(beer.getColor())
-                    .costPrice(beer.getCostPrice())
-                    .dateManufacture(beer.getDateManufacture())
-                    .fortress(beer.getFortress())
-                    .shelfLife(beer.getShelfLife())
-                    .build();
-        }
-
+        return Beer.builder().build();
     }
 
-    public List<Beer> getBeerList() {
+    public List<Beer> getBeers() {
         return beerRepository.findAll().stream().map(
                 beerEntity -> Beer.builder()
                         .id(beerEntity.getId())
@@ -66,32 +60,84 @@ public class BeerService {
                 .collect(Collectors.toList());
     }
 
-    public void makeBeer(long idBeer, int quantity) {
-        Optional<BeerEntity> beer = beerRepository.findById(idBeer);
+    @Transactional
+    public void createdBeer(final OrderCreatedBeer orderCreatedBeer) {
+        final long idBeer = orderCreatedBeer.getIdBeer();
+        final int liters = orderCreatedBeer.getLiters();
 
-        if (beer.isEmpty()) {
-            //todo кинуть exception
-        } else {
-            //todo сделать запрос на скалад, есть ли ингридиееты, если есть - отпрать на склад готовое пиво
+        final Optional<BeerEntity> optionalBeer = beerRepository.findById(idBeer);
 
-            WarehouseEntity warehouseEntity = warehouseRepository.findAll().get(0);
+        if (optionalBeer.isPresent()) {
+            final BeerEntity beerEntity = optionalBeer.get();
 
-            if (warehouseEntity == null) {
-                warehouseEntity = new WarehouseEntity();
-                warehouseEntity.setFinishedBeerEntitiesList(new ArrayList<>());
+            final boolean thereIsIngredients = warehouseService.thereIsIngredients(beerEntity);
 
-                warehouseRepository.save(warehouseEntity);
+            if (thereIsIngredients) {
+                warehouseService.takeIngredientsForBeer(beerEntity);
+
+                beerEntity.setLitersInStock(beerEntity.getLitersInStock() + liters);
+
+                beerRepository.save(beerEntity);
+            } else {
+                final Beer beer = beerRequestMapper.destinationToSource(beerEntity);
+                managerService.needIngredientForBeer(beer);
+            }
+        }
+    }
+
+    @Transactional
+    public OrderEntity sellBeer(final Order order) {
+
+        final boolean thereIsBeer = warehouseService.thereIsBeer(order.getOrders());
+
+       if (thereIsBeer) {
+           final OrderEntity orderEntity = orderMapper.sourceToDestination(order);
+           orderEntity.setPrice(totalPrice(order.getOrders()));
+
+           warehouseService.sellBeer(orderEntity.getOrders());
+           orderRepository.save(orderEntity);
+           return orderEntity;
+       } else {
+            for (PartOrder part: order.getOrders()) {
+                final OrderCreatedBeer orderCreatedBeer = new OrderCreatedBeer();
+                orderCreatedBeer.setIdBeer(part.getBeer().getId());
+                orderCreatedBeer.setLiters(part.getQuantity());
+
+                createdBeer(orderCreatedBeer);
             }
 
-            FinishedBeerEntity finishedBeerEntity = new FinishedBeerEntity();
-            finishedBeerEntity.setBeer(beer.get());
-            finishedBeerEntity.setQuantity(quantity);
+            return sellBeer(order);
+        }
+    }
 
-            finishedBeerRepository.save(finishedBeerEntity);
 
-            warehouseEntity.getFinishedBeerEntitiesList().add(finishedBeerEntity);
+    private double totalPrice(final List<PartOrder> products) {
+        int totalPrice = 0;
+        for (PartOrder order: products)
+            totalPrice =+ order.getQuantity() * order.getBeer().getCostPrice();
 
-            warehouseRepository.save(warehouseEntity);
+        return DoubleRounder.round(totalPrice/100.0, 2);
+    }
+
+    private void updatedBeer(final BeerEntity beerEntity, final Beer newBeer) {
+        if (newBeer.getName() != null) beerEntity.setName(newBeer.getName());
+
+        if (newBeer.getColor() != null) beerEntity.setColor(newBeer.getColor());
+
+        if (newBeer.getFortress() > 0.0) beerEntity.setFortress(newBeer.getFortress());
+
+        if (newBeer.getShelfLife() > 0) beerEntity.setShelfLife(newBeer.getShelfLife());
+
+        if (newBeer.getCostPrice() > 0) beerEntity.setCostPrice(newBeer.getCostPrice());
+
+        if (newBeer.getRecipe() != null) {
+            //TODO придумать что нибудь другое
+            final List<PartRecipeEntity> recipe = new ArrayList<>();
+            for (PartRecipe part: newBeer.getRecipe())
+                recipe.add(partRecipeMapper.sourceToDestination(part));
+
+            beerEntity.getRecipe().clear();
+            beerEntity.getRecipe().addAll(recipe);
         }
     }
 }

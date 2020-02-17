@@ -5,8 +5,5 @@ import com.example.demo.entity.UserEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface EmployeeSignUpRequestMapper {
-    UserEntity sourceToDestination(EmployeeSignUpRequest source);
-
-    EmployeeSignUpRequest destinationToSource(UserEntity destination);
+public interface EmployeeSignUpRequestMapper extends DestinationMapper<EmployeeSignUpRequest, UserEntity> {
 }

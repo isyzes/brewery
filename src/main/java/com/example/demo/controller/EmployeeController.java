@@ -3,14 +3,16 @@ package com.example.demo.controller;
 import com.example.demo.dto.Employee;
 import com.example.demo.service.EmployeeService;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Data
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/staff/")
 public class EmployeeController {
     private final EmployeeService service;

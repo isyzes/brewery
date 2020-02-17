@@ -19,6 +19,5 @@ public class UserEntity {
     private String fio;
     private LocalDate birthDate;
     private String selfDescription;
-
     private Roles userRole;
 }
