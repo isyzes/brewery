@@ -1,12 +1,16 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.Beer;
 import com.example.demo.dto.Employee;
 import com.example.demo.dto.EmployeeSignUpRequest;
 import com.example.demo.entity.AuthInfoEntity;
+import com.example.demo.entity.EmployeeEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.exception.SuchUserAlreadyExistException;
+import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.mapper.EmployeeSignUpRequestMapper;
 import com.example.demo.repository.AuthInfoRepository;
+import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.Roles;
 import lombok.AllArgsConstructor;
@@ -16,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,56 +29,47 @@ public class EmployeeService {
     private final AuthInfoRepository authInfoRepository;
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final EmployeeMapper employeeMapper;
 
-    public Employee toHire(Employee employee) {
-        employee.setId(1);
+    private final PasswordEncoder passwordEncoder;
+    private final EmployeeRepository employeeRepository;
+    private EmployeeSignUpRequestMapper employeeSignUpRequestMapper;
+
+
+    public Employee created(final Employee employee) {
+        final EmployeeEntity employeeEntity = employeeMapper.sourceToDestination(employee);
+        employeeEntity.setWorks(true);
+        employeeEntity.setDateStart(LocalDate.now());
+        employeeRepository.save(employeeEntity);
         return employee;
     }
 
     public List<Employee> getStaff() {
-        return employeeList();
+        return employeeRepository.findAll().stream().map(
+                employeeEntity -> Employee.builder()
+                        .id(employeeEntity.getId())
+                        .name(employeeEntity.getName())
+                        .wages(employeeEntity.getWages())
+                        .isWorks(employeeEntity.isWorks())
+                        .department(employeeEntity.getDepartment())
+                        .dateStart(employeeEntity.getDateStart())
+                        .dateEnd(employeeEntity.getDateEnd())
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public void toDismiss(long idEmployee) {
-    }
+    public void toDismiss(final long idEmployee) {
+        final Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findById(idEmployee);
 
-    private List<Employee> employeeList() {
-        Employee firstEmployee = Employee.builder()
-                .id(5)
-                .name("Adam Gordon")
-                .department("Production")
-                .wages(2500)
-                .isWorks(true)
-                .dateStart(LocalDate.of(2018, 1,15))
-                .dateEnd(null)
-                .build();
-
-        Employee secondEmployee = Employee.builder()
-                .id(2)
-                .name("Carla Williams")
-                .department("Production")
-                .wages(5070)
-                .isWorks(true)
-                .dateStart( LocalDate.of(2018, 1, 15))
-                .dateEnd(null)
-                .build();
-
-        Employee thirdEmployee = Employee.builder()
-                .id(4)
-                .name("Boris Jones")
-                .department("Production")
-                .wages(1500)
-                .isWorks(false)
-                .dateStart(LocalDate.of(2018, 1, 15))
-                .dateEnd(LocalDate.of(2019,10,14))
-                .build();
-        return List.of(firstEmployee, secondEmployee, thirdEmployee);
+        if (optionalEmployeeEntity.isPresent()) {
+            final EmployeeEntity employeeEntity = optionalEmployeeEntity.get();
+            employeeEntity.setWorks(false);
+            employeeEntity.setDateEnd(LocalDate.now());
+            employeeRepository.save(employeeEntity);
+        }
     }
 
 
-
-    private EmployeeSignUpRequestMapper employeeSignUpRequestMapper;
 
     @Transactional
     public void signUp(final EmployeeSignUpRequest request) throws SuchUserAlreadyExistException {

@@ -1,9 +1,7 @@
 package com.example.demo.mockdata;
 
-import com.example.demo.entity.BeerEntity;
-import com.example.demo.entity.IngredientEntity;
-import com.example.demo.entity.OrderEntity;
-import com.example.demo.entity.PartRecipeEntity;
+import com.example.demo.dto.Employee;
+import com.example.demo.entity.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -92,16 +90,53 @@ public class ControllerMockData {
         return List.of(first, second, third);
     }
 
-    public static OrderEntity getNewOrder() {
-//        OrderEntity orderEntity = new OrderEntity();
-//        orderEntity.setId(4);
-
-//        PartRecipeEntity partRecipeEntity = new PartRecipeEntity();
-
-//        PartRecipeEntity partRecipeEntity = new PartRecipeEntity();
-
-//        orderEntity.setOrders();
-
-        return new OrderEntity();
+    public static EmployeeEntity getNewEmployeeEntity(long id) {
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setId(id);
+        return employeeEntity;
     }
+
+    public static Optional<EmployeeEntity> getOptionalEmployeeEntity() {
+        return Optional.of(getNewEmployeeEntity());
+    }
+
+    public static EmployeeEntity getNewEmployeeEntity() {
+        EmployeeEntity employeeEntity = new EmployeeEntity();
+        employeeEntity.setId(ID);
+        employeeEntity.setWorks(true);
+
+        return employeeEntity;
+    }
+
+    public static List<EmployeeEntity> getEmployeeEntities() {
+        EmployeeEntity firstEmployee = new EmployeeEntity();
+        firstEmployee.setId(5);
+        firstEmployee.setName("Adam Gordon");
+        firstEmployee.setDepartment("Production");
+        firstEmployee.setWages(2500);
+        firstEmployee.setWorks(true);
+        firstEmployee.setDateStart(LocalDate.of(2018, 1,15));
+        firstEmployee.setDateEnd(null);
+
+        EmployeeEntity secondEmployee = new EmployeeEntity();
+        secondEmployee.setId(2);
+        secondEmployee.setName("Carla Williams");
+        secondEmployee.setDepartment("Production");
+        secondEmployee.setWages(5070);
+        secondEmployee.setWorks(true);
+        secondEmployee.setDateStart(LocalDate.of(2018, 1,15));
+        secondEmployee.setDateEnd(null);
+
+
+        EmployeeEntity thirdEmployee = new EmployeeEntity();
+        thirdEmployee.setId(4);
+        thirdEmployee.setName("Boris Jones");
+        thirdEmployee.setDepartment("Production");
+        thirdEmployee.setWages(1500);
+        thirdEmployee.setWorks(false);
+        thirdEmployee.setDateStart(LocalDate.of(2018, 1,15));
+        thirdEmployee.setDateEnd(LocalDate.of(2019,10,14));
+        return List.of(firstEmployee, secondEmployee, thirdEmployee);
+    }
+
 }

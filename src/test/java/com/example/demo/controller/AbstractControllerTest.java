@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UserSignInResponse;
 import com.example.demo.repository.BeerRepository;
+import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.IngredientRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.security.LoadUserDetailService;
@@ -42,6 +43,8 @@ public abstract class AbstractControllerTest {
     protected OrderRepository orderRepository;
     @MockBean
     protected IngredientRepository ingredientRepository;
+    @MockBean
+    protected EmployeeRepository employeeRepository;
 
     @SpyBean
     protected LoadUserDetailService loadUserDetailService;

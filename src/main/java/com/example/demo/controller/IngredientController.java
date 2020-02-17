@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class PurchasesController {
+public class IngredientController {
     private final PurchasesService service;
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/buy/{idIngredient}?quantity={quantity}", consumes = MediaType.APPLICATION_JSON_VALUE)

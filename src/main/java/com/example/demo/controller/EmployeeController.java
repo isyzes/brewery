@@ -18,20 +18,20 @@ public class EmployeeController {
     private final EmployeeService service;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "employee/take", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Employee toHire(@RequestBody Employee employee) {
-        return service.toHire(employee);
+    @PostMapping(value = "employee/created", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Employee created(@RequestBody final Employee employee) {
+        return service.created(employee);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "employee/to-dismiss/{idEmployee}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void toDismiss(@PathVariable long idEmployee) {
+    public void toDismiss(@PathVariable final long idEmployee) {
         service.toDismiss(idEmployee);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "list")
-    public List<Employee> getStaffList() {
+    public List<Employee> getStaff() {
         return service.getStaff();
     }
 }
