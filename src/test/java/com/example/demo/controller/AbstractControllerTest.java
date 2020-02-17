@@ -1,10 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.UserSignInResponse;
-import com.example.demo.repository.BeerRepository;
-import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.repository.IngredientRepository;
-import com.example.demo.repository.OrderRepository;
+import com.example.demo.entity.AuthInfoEntity;
+import com.example.demo.entity.UserEntity;
+import com.example.demo.repository.*;
 import com.example.demo.security.LoadUserDetailService;
 import com.example.demo.security.Roles;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +35,8 @@ public abstract class AbstractControllerTest {
     protected ObjectMapper objectMapper;
     @Autowired
     protected PasswordEncoder passwordEncoder;
-
+    @MockBean
+    protected AuthInfoRepository authInfoRepository;
     @MockBean
     protected BeerRepository beerRepository;
     @MockBean
@@ -69,4 +69,17 @@ public abstract class AbstractControllerTest {
 
         return "Bearer " + objectMapper.readValue(response, UserSignInResponse.class).getToken();
     }
+
+    protected AuthInfoEntity createAuthInfo(Roles roles) {
+        final UserEntity user = new UserEntity();
+        user.setUserRole(roles);
+        user.setEmail("vasya@email.com");
+
+        final AuthInfoEntity authInfo = new AuthInfoEntity();
+        authInfo.setLogin(user.getEmail());
+        authInfo.setPassword(passwordEncoder.encode("qwerty"));
+        authInfo.setUser(user);
+        return authInfo;
+    }
+
 }
