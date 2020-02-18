@@ -113,7 +113,7 @@ public class BeerControllerTest extends AbstractControllerTest {
 
         given(ingredientRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getNewOptionalIngredient());
 
-        mockMvc.perform(post("/beers/created").header("Authorization", token)
+        mockMvc.perform(put("/beers/updated").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idBeer\" : \"3\", \"liters\" : 2551}"))
 

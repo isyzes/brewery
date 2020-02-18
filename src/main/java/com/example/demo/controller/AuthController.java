@@ -32,19 +32,14 @@ public class AuthController {
 
     @PostMapping(value = "/employee/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserSignInResponse singUp(@RequestBody final EmployeeSignUpRequest request) throws SuchUserAlreadyExistException {
+    public void singUp(@RequestBody final EmployeeSignUpRequest request) throws SuchUserAlreadyExistException {
         employeeService.signUp(request);
-        return singIn(new UserSignInRequest(request.getEmail(), request.getPassword()));
+//        return singIn(new UserSignInRequest(request.getEmail(), request.getPassword()));
     }
 
     @PostMapping(value = "/employee/sign-in", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserSignInResponse singIn(@RequestBody final UserSignInRequest request) {
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
-        return new UserSignInResponse(
-                jwtUtil.generateToken(
-                        new User(request.getEmail(), request.getPassword(),
-                                List.of(new SimpleGrantedAuthority("MANAGER")))));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), List.of(new SimpleGrantedAuthority("MANAGER")))));
     }
 }

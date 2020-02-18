@@ -1,23 +1,23 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.PurchasesService;
-import lombok.Data;
+import com.example.demo.dto.IngredientRequestOrder;
+import com.example.demo.exception.BuyIngredientException;
+import com.example.demo.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/ingredients/")
 public class IngredientController {
-    private final PurchasesService service;
+    private final IngredientService service;
+
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "/buy/{idIngredient}?quantity={quantity}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void buyIngredient(@PathVariable long idIngredient, @PathVariable String quantity) {
-        service.buyIngredient(idIngredient, quantity);
+    @PutMapping(value = "buy", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void buyIngredient(@RequestBody final IngredientRequestOrder ingredientRequestOrder) throws BuyIngredientException {
+        service.buyIngredient(ingredientRequestOrder);
     }
 }

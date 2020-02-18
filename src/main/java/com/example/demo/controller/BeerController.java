@@ -4,6 +4,7 @@ import com.example.demo.dto.Beer;
 import com.example.demo.dto.Order;
 import com.example.demo.dto.OrderCreatedBeer;
 import com.example.demo.entity.OrderEntity;
+import com.example.demo.exception.UpdatedBeerException;
 import com.example.demo.service.BeerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,20 +22,20 @@ public class BeerController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "updated/{idBeer}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Beer updatedBeer(@RequestBody final Beer newBeer, @PathVariable final long idBeer) {
+    public Beer updatedBeer(@RequestBody final Beer newBeer, @PathVariable final long idBeer) throws UpdatedBeerException {
         return service.updatedBeer(newBeer, idBeer);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping(value = "updated")
+    public void updatedLitersInStockBeer(@RequestBody final OrderCreatedBeer orderCreatedBeer) {
+        service.updatedLitersInStockBeer(orderCreatedBeer);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "list")
     public List<Beer> getBeers() {
         return service.getBeers();
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "created")
-    public void createdBeer(@RequestBody final OrderCreatedBeer orderCreatedBeer) {
-        service.createdBeer(orderCreatedBeer);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
