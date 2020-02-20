@@ -1,10 +1,8 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.time.LocalDate;
 import java.util.List;

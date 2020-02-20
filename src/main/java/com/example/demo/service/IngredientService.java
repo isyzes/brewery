@@ -1,14 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.*;
-import com.example.demo.entity.BeerEntity;
+import com.example.demo.dto.IngredientRequestOrder;
+import com.example.demo.dto.PartRecipe;
 import com.example.demo.entity.IngredientEntity;
-import com.example.demo.entity.PartOrderEntity;
-import com.example.demo.entity.PartRecipeEntity;
 import com.example.demo.exception.BuyIngredientException;
-import com.example.demo.exception.SuchUserAlreadyExistException;
-import com.example.demo.mapper.IngredientMapper;
-import com.example.demo.repository.BeerRepository;
 import com.example.demo.repository.IngredientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

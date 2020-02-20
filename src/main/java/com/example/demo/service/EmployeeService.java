@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.Beer;
 import com.example.demo.dto.Employee;
 import com.example.demo.dto.EmployeeSignUpRequest;
 import com.example.demo.entity.AuthInfoEntity;

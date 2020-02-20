@@ -1,7 +1,9 @@
 package com.example.demo.mockdata;
 
-import com.example.demo.dto.Employee;
-import com.example.demo.entity.*;
+import com.example.demo.entity.BeerEntity;
+import com.example.demo.entity.EmployeeEntity;
+import com.example.demo.entity.IngredientEntity;
+import com.example.demo.entity.PartRecipeEntity;
 
 import java.time.LocalDate;
 import java.util.List;
