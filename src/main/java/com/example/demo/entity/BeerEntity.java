@@ -9,18 +9,27 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "Beer")
 public class BeerEntity {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "color")
     private String color;
+    @Column(name = "fortress")
     private double fortress;
+    @Column(name = "date_manufacture")
     @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate dateManufacture;
+    @Column(name = "shelf_life")
     private int shelfLife;
+    @Column(name = "cost_price")
     private int costPrice;
-    @OneToMany
-    private List<PartRecipeEntity> recipe;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "beer")
+    private List<ItemRecipeEntity> recipe;
+    @Column(name = "liters_in_stock")
     private int litersInStock;
 }

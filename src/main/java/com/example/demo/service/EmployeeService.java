@@ -3,13 +3,11 @@ package com.example.demo.service;
 import com.example.demo.dto.Employee;
 import com.example.demo.dto.EmployeeSignUpRequest;
 import com.example.demo.entity.AuthInfoEntity;
-import com.example.demo.entity.EmployeeEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.exception.SuchUserAlreadyExistException;
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.mapper.EmployeeSignUpRequestMapper;
 import com.example.demo.repository.AuthInfoRepository;
-import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.Roles;
 import lombok.AllArgsConstructor;
@@ -31,23 +29,22 @@ public class EmployeeService {
     private final EmployeeMapper employeeMapper;
 
     private final PasswordEncoder passwordEncoder;
-    private final EmployeeRepository employeeRepository;
     private EmployeeSignUpRequestMapper employeeSignUpRequestMapper;
 
 
     public Employee created(final Employee employee) {
-        final EmployeeEntity employeeEntity = employeeMapper.sourceToDestination(employee);
+        final UserEntity employeeEntity = employeeMapper.sourceToDestination(employee);
         employeeEntity.setWorks(true);
         employeeEntity.setDateStart(LocalDate.now());
-        employeeRepository.save(employeeEntity);
+        userRepository.save(employeeEntity);
         return employee;
     }
 
     public List<Employee> getStaff() {
-        return employeeRepository.findAll().stream().map(
+        return userRepository.findAllByUserRole(Roles.EMPLOYEE).stream().map(
                 employeeEntity -> Employee.builder()
                         .id(employeeEntity.getId())
-                        .name(employeeEntity.getName())
+                        .fio(employeeEntity.getFio())
                         .wages(employeeEntity.getWages())
                         .isWorks(employeeEntity.isWorks())
                         .department(employeeEntity.getDepartment())
@@ -58,13 +55,13 @@ public class EmployeeService {
     }
 
     public void toDismiss(final long idEmployee) {
-        final Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findById(idEmployee);
+        final Optional<UserEntity> optionalEmployeeEntity = userRepository.findById(idEmployee);
 
         if (optionalEmployeeEntity.isPresent()) {
-            final EmployeeEntity employeeEntity = optionalEmployeeEntity.get();
+            final UserEntity employeeEntity = optionalEmployeeEntity.get();
             employeeEntity.setWorks(false);
             employeeEntity.setDateEnd(LocalDate.now());
-            employeeRepository.save(employeeEntity);
+            userRepository.save(employeeEntity);
         }
     }
 

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                            http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+    <changeSet id="1" author="Dima">
+        <createTable tableName="AuthInfo">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(64)"/>
+            <column name="password" type="VARCHAR(64)"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Dima">
+        <createTable tableName="Beer">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)"/>
+            <column name="color" type="VARCHAR(64)"/>
+            <column name="fortress" type="DECIMAL"/>
+            <column name="date_manufacture" type="DATE"/>
+            <column name="shelf_life" type="SMALLINT UNSIGNED"/>
+            <column name="cost_price" type="MEDIUMINT UNSIGNED"/>
+            <column name="liters_in_stock" type="INT UNSIGNED"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Dima">
+        <createTable tableName="Ingredient">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)"/>
+            <column name="milligrams_in_stock" type="INT UNSIGNED"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="Dima">
+        <createTable tableName="ItemOrder">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="beer_id" type="BIGINT"/>
+            <column name="liters" type="INT UNSIGNED"/>
+            <column name="order_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Dima">
+        <createTable tableName="ItemRecipe">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ingredient_id" type="BIGINT"/>
+            <column name="milligram" type="INT UNSIGNED"/>
+            <column name="beer_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="Dima">
+        <createTable tableName="Order">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL"/>
+            <column name="milligram" type="INT UNSIGNED"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="Dima">
+        <createTable tableName="User">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(64)"/>
+            <column name="fio" type="VARCHAR(128)"/>
+            <column name="birth_date" type="DATE"/>
+            <column name="self_description" type="VARCHAR(255)"/>
+            <column name="user_role" type="integer" />
+            <column name="department" type="VARCHAR(64)" />
+            <column name="wages" type="DECIMAL" />
+            <column name="is_works" type="BOOL" />
+            <column name="date_start" type="DATE"/>
+            <column name="date_end" type="DATE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="Dima">
+        <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1"/>
+    </changeSet>
+</databaseChangeLog>

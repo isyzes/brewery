@@ -9,5 +9,5 @@ import java.util.List;
 @Builder
 public class Order {
     private Consumer consumer;
-    private List<PartOrder> orders;
+    private List<ItemOrder> orders;
 }

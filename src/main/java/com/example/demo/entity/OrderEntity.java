@@ -7,13 +7,17 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "Order")
 public class OrderEntity {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(name = "price")
     private double price;
-    @ManyToOne
-    private ConsumerEntity consumer;
-    @OneToMany
-    private List<PartOrderEntity> orders;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity consumer;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    private List<ItemOrderEntity> orders;
 }

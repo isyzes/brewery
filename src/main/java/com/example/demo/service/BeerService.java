@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.converter.OrderConverter;
 import com.example.demo.converter.PartRecipeConverter;
 import com.example.demo.dto.*;
 import com.example.demo.entity.BeerEntity;
@@ -69,7 +70,7 @@ public class BeerService {
 
         if (optionalBeer.isPresent()) {
             final BeerEntity beerEntity = optionalBeer.get();
-            final List<PartRecipe> recipe = PartRecipeConverter.destinationToSource(beerEntity.getRecipe());
+            final List<ItemRecipe> recipe = PartRecipeConverter.destinationToSource(beerEntity.getRecipe());
             final boolean thereIsIngredients = warehouseService.thereIsIngredients(recipe);
 
             if (thereIsIngredients) {
@@ -90,8 +91,9 @@ public class BeerService {
         final boolean thereIsBeer = thereIsBeer(order.getOrders());
 
        if (thereIsBeer) {
-           final OrderEntity orderEntity = orderMapper.sourceToDestination(order);
+           final OrderEntity orderEntity = OrderConverter.destinationToSource(order);
            orderEntity.setPrice(totalPrice(order.getOrders()));
+
 
            sellBeer(order.getOrders());
 
@@ -105,8 +107,8 @@ public class BeerService {
 
 
 
-    private boolean thereIsBeer(final List<PartOrder> orders) {
-        for (PartOrder part: orders) {
+    private boolean thereIsBeer(final List<ItemOrder> orders) {
+        for (ItemOrder part: orders) {
             final long id = part.getBeer().getId();
 
             final Optional<BeerEntity> optionalBeerEntity = beerRepository.findById(id);
@@ -114,7 +116,7 @@ public class BeerService {
             if (optionalBeerEntity.isPresent()) {
                 final BeerEntity beerEntity = optionalBeerEntity.get();
 
-                if (part.getQuantity() > beerEntity.getLitersInStock())
+                if (part.getLiters() > beerEntity.getLitersInStock())
                     return false;
 
             } else return false;
@@ -123,21 +125,21 @@ public class BeerService {
         return true;
     }
 
-    private void sellBeer(final List<PartOrder> orders) {
-        for (PartOrder part: orders) {
+    private void sellBeer(final List<ItemOrder> orders) {
+        for (ItemOrder part: orders) {
             final long id = part.getBeer().getId();
             final Optional<BeerEntity> optionalBeerEntity = beerRepository.findById(id);
             final BeerEntity beerEntity = optionalBeerEntity.get();
-            final int totalLitersInStock = beerEntity.getLitersInStock() - part.getQuantity();
+            final int totalLitersInStock = beerEntity.getLitersInStock() - part.getLiters();
             beerEntity.setLitersInStock(totalLitersInStock);
             beerRepository.save(beerEntity);
         }
     }
 
-    private double totalPrice(final List<PartOrder> products) {
+    private double totalPrice(final List<ItemOrder> products) {
         int totalPrice = 0;
-        for (PartOrder order: products)
-            totalPrice =+ order.getQuantity() * order.getBeer().getCostPrice();
+        for (ItemOrder order: products)
+            totalPrice =+ order.getLiters() * order.getBeer().getCostPrice();
 
         return DoubleRounder.round(totalPrice/100.0, 2);
     }

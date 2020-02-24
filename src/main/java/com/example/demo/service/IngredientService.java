@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.IngredientRequestOrder;
-import com.example.demo.dto.PartRecipe;
+import com.example.demo.dto.ItemRecipe;
 import com.example.demo.entity.IngredientEntity;
 import com.example.demo.exception.BuyIngredientException;
 import com.example.demo.repository.IngredientRepository;
@@ -32,8 +32,8 @@ public class IngredientService {
         }
     }
 
-    public boolean thereIsIngredients (final List<PartRecipe> recipe) {
-        for (PartRecipe part: recipe) {
+    public boolean thereIsIngredients (final List<ItemRecipe> recipe) {
+        for (ItemRecipe part: recipe) {
             final long id = part.getIngredient().getId();
 
             //TODO: remove database access in a loop
@@ -50,8 +50,8 @@ public class IngredientService {
         return true;
     }
 
-    public void takeIngredientsForBeer(List<PartRecipe> recipe) {
-        for (PartRecipe part: recipe) {
+    public void takeIngredientsForBeer(List<ItemRecipe> recipe) {
+        for (ItemRecipe part: recipe) {
             final long id = part.getIngredient().getId();
             //TODO: remove database access in a loop
             final Optional<IngredientEntity> optionalIngredientEntity = ingredientRepository.findById(id);

@@ -1,9 +1,10 @@
 package com.example.demo.mockdata;
 
 import com.example.demo.entity.BeerEntity;
-import com.example.demo.entity.EmployeeEntity;
 import com.example.demo.entity.IngredientEntity;
-import com.example.demo.entity.PartRecipeEntity;
+import com.example.demo.entity.ItemRecipeEntity;
+import com.example.demo.entity.UserEntity;
+import com.example.demo.security.Roles;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,8 +45,8 @@ public class ControllerMockData {
         return beerEntity;
     }
 
-    public static PartRecipeEntity getNewPartRecipeEntity() {
-        PartRecipeEntity partRecipeEntity = new PartRecipeEntity();
+    public static ItemRecipeEntity getNewPartRecipeEntity() {
+        final ItemRecipeEntity partRecipeEntity = new ItemRecipeEntity();
         partRecipeEntity.setId(ID);
         partRecipeEntity.setMilligram(5);
         partRecipeEntity.setIngredientEntity(getNewIngredient());
@@ -53,7 +54,7 @@ public class ControllerMockData {
     }
 
     public static IngredientEntity getNewIngredient() {
-        IngredientEntity ingredientEntity = new IngredientEntity();
+        final IngredientEntity ingredientEntity = new IngredientEntity();
         ingredientEntity.setId(ID);
         ingredientEntity.setName("Water");
         ingredientEntity.setMilligramsInStock(647851);
@@ -61,7 +62,7 @@ public class ControllerMockData {
     }
 
     public static List<BeerEntity> getBeerEntityList() {
-        BeerEntity first = new BeerEntity();
+        final BeerEntity first = new BeerEntity();
         first.setId(1);
         first.setName("Garage");
         first.setColor("bright");
@@ -70,7 +71,7 @@ public class ControllerMockData {
         first.setShelfLife(25);
         first.setCostPrice(574);
 
-        BeerEntity second = new BeerEntity();
+        final BeerEntity second = new BeerEntity();
         second.setId(2);
         second.setName("Miller");
         second.setColor("bright");
@@ -79,7 +80,7 @@ public class ControllerMockData {
         second.setShelfLife(25);
         second.setCostPrice(755);
 
-        BeerEntity third = new BeerEntity();
+        final BeerEntity third = new BeerEntity();
         third.setId(3);
         third.setName("Heineken");
         third.setColor("dark");
@@ -92,52 +93,57 @@ public class ControllerMockData {
         return List.of(first, second, third);
     }
 
-    public static EmployeeEntity getNewEmployeeEntity(long id) {
-        EmployeeEntity employeeEntity = new EmployeeEntity();
+    public static UserEntity getNewEmployeeEntity(final long id) {
+        final UserEntity employeeEntity = new UserEntity();
+        employeeEntity.setUserRole(Roles.EMPLOYEE);
         employeeEntity.setId(id);
         return employeeEntity;
     }
 
-    public static Optional<EmployeeEntity> getOptionalEmployeeEntity() {
+    public static Optional<UserEntity> getOptionalEmployeeEntity() {
         return Optional.of(getNewEmployeeEntity());
     }
 
-    public static EmployeeEntity getNewEmployeeEntity() {
-        EmployeeEntity employeeEntity = new EmployeeEntity();
+    public static UserEntity getNewEmployeeEntity() {
+        final UserEntity employeeEntity = new UserEntity();
         employeeEntity.setId(ID);
+        employeeEntity.setUserRole(Roles.EMPLOYEE);
         employeeEntity.setWorks(true);
 
         return employeeEntity;
     }
 
-    public static List<EmployeeEntity> getEmployeeEntities() {
-        EmployeeEntity firstEmployee = new EmployeeEntity();
-        firstEmployee.setId(5);
-        firstEmployee.setName("Adam Gordon");
+    public static List<UserEntity> getEmployeeEntities() {
+        final UserEntity firstEmployee = new UserEntity();
+        firstEmployee.setId(5L);
+        firstEmployee.setFio("Adam Gordon");
         firstEmployee.setDepartment("Production");
         firstEmployee.setWages(2500);
         firstEmployee.setWorks(true);
         firstEmployee.setDateStart(LocalDate.of(2018, 1,15));
         firstEmployee.setDateEnd(null);
+        firstEmployee.setUserRole(Roles.EMPLOYEE);
 
-        EmployeeEntity secondEmployee = new EmployeeEntity();
-        secondEmployee.setId(2);
-        secondEmployee.setName("Carla Williams");
+        final UserEntity secondEmployee = new UserEntity();
+        secondEmployee.setId(2L);
+        secondEmployee.setFio("Carla Williams");
         secondEmployee.setDepartment("Production");
         secondEmployee.setWages(5070);
         secondEmployee.setWorks(true);
         secondEmployee.setDateStart(LocalDate.of(2018, 1,15));
         secondEmployee.setDateEnd(null);
+        secondEmployee.setUserRole(Roles.EMPLOYEE);
 
-
-        EmployeeEntity thirdEmployee = new EmployeeEntity();
-        thirdEmployee.setId(4);
-        thirdEmployee.setName("Boris Jones");
+        final UserEntity thirdEmployee = new UserEntity();
+        thirdEmployee.setId(4L);
+        thirdEmployee.setFio("Boris Jones");
         thirdEmployee.setDepartment("Production");
         thirdEmployee.setWages(1500);
         thirdEmployee.setWorks(false);
         thirdEmployee.setDateStart(LocalDate.of(2018, 1,15));
         thirdEmployee.setDateEnd(LocalDate.of(2019,10,14));
+        thirdEmployee.setUserRole(Roles.EMPLOYEE);
+
         return List.of(firstEmployee, secondEmployee, thirdEmployee);
     }
 

@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@TestPropertySource("classpath:application-test.properties")
 public abstract class AbstractControllerTest {
     @Autowired
     protected MockMvc mockMvc;
@@ -44,7 +46,7 @@ public abstract class AbstractControllerTest {
     @MockBean
     protected IngredientRepository ingredientRepository;
     @MockBean
-    protected EmployeeRepository employeeRepository;
+    protected UserRepository userRepository;
 
     @SpyBean
     protected LoadUserDetailService loadUserDetailService;

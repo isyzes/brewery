@@ -3,8 +3,8 @@ package com.example.demo.dto;
 import lombok.Data;
 
 @Data
-public class PartOrder {
+public class ItemOrder {
     private long id;
     private Beer beer;
-    private int quantity;
+    private int liters;
 }

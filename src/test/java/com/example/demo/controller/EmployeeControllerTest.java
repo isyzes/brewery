@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
+import static com.example.demo.security.Roles.EMPLOYEE;
 import static com.example.demo.security.Roles.MANAGER;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -35,7 +36,7 @@ public class EmployeeControllerTest extends AbstractControllerTest {
     public void testEmployeeToDismissIsOk() throws Exception {
         final String token = signIn(MANAGER);
 
-        given(employeeRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getOptionalEmployeeEntity());
+        given(userRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getOptionalEmployeeEntity());
 
         mockMvc.perform(put("/staff/employee/to-dismiss/3").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -45,13 +46,13 @@ public class EmployeeControllerTest extends AbstractControllerTest {
     @Test
     public void testGetStaffListIsOk() throws Exception {
         final String token = signIn(MANAGER);
-        given(employeeRepository.findAll()).willReturn(ControllerMockData.getEmployeeEntities());
+        given(userRepository.findAllByUserRole(EMPLOYEE)).willReturn(ControllerMockData.getEmployeeEntities());
         mockMvc.perform(get("/staff/list").header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
                         "{" +
                             "\"id\":5," +
-                            "\"name\":\"Adam Gordon\"," +
+                            "\"fio\":\"Adam Gordon\"," +
                             "\"department\":\"Production\"," +
                             "\"wages\":2500.0," +
                             "\"dateStart\":\"15.01.2018\"," +
@@ -60,7 +61,7 @@ public class EmployeeControllerTest extends AbstractControllerTest {
                         "}," +
                         "{" +
                             "\"id\":2," +
-                            "\"name\":\"Carla Williams\"," +
+                            "\"fio\":\"Carla Williams\"," +
                             "\"department\":\"Production\"," +
                             "\"wages\":5070.0," +
                             "\"dateStart\":\"15.01.2018\"," +
@@ -69,7 +70,7 @@ public class EmployeeControllerTest extends AbstractControllerTest {
                         "}," +
                         "{" +
                             "\"id\":4," +
-                            "\"name\":\"Boris Jones\"," +
+                            "\"fio\":\"Boris Jones\"," +
                             "\"department\":\"Production\"," +
                             "\"wages\":1500.0," +
                             "\"dateStart\":\"15.01.2018\"," +

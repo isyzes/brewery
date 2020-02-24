@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Builder
 public class Employee {
     private long id;
-    private String name;
+    private String fio;
     private String department;
     private double wages;
     private  boolean isWorks;
