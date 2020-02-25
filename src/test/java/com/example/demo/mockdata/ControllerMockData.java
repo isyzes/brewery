@@ -1,9 +1,6 @@
 package com.example.demo.mockdata;
 
-import com.example.demo.entity.BeerEntity;
-import com.example.demo.entity.IngredientEntity;
-import com.example.demo.entity.ItemRecipeEntity;
-import com.example.demo.entity.UserEntity;
+import com.example.demo.entity.*;
 import com.example.demo.security.Roles;
 
 import java.time.LocalDate;
@@ -35,7 +32,7 @@ public class ControllerMockData {
         beerEntity.setDateManufacture(LocalDate.of(2020, 12, 12));
         beerEntity.setShelfLife(25);
         beerEntity.setLitersInStock(6225);
-        beerEntity.setRecipe(List.of(getNewPartRecipeEntity()));
+        beerEntity.setRecipe(getRecipeEntity());
         beerEntity.setCostPrice(657);
         return beerEntity;
     }
@@ -45,8 +42,15 @@ public class ControllerMockData {
         return beerEntity;
     }
 
-    public static ItemRecipeEntity getNewPartRecipeEntity() {
-        final ItemRecipeEntity partRecipeEntity = new ItemRecipeEntity();
+    public static RecipeEntity getRecipeEntity() {
+        RecipeEntity recipeEntity = new RecipeEntity();
+        recipeEntity.setId(ID);
+        recipeEntity.setItems(List.of(getNewPartRecipeEntity()));
+        return recipeEntity;
+    }
+
+    public static RecipeItemEntity getNewPartRecipeEntity() {
+        final RecipeItemEntity partRecipeEntity = new RecipeItemEntity();
         partRecipeEntity.setId(ID);
         partRecipeEntity.setMilligram(5);
         partRecipeEntity.setIngredientEntity(getNewIngredient());

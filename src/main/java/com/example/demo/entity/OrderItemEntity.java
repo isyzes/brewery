@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "ItemOrder")
-public class ItemOrderEntity {
+@Table(name = "OrderItem")
+public class OrderItemEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)

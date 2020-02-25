@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Order")
+@Table(name = "OrderEntity")
 public class OrderEntity {
     @Id
     @Column(name = "id")
@@ -19,5 +19,5 @@ public class OrderEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity consumer;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
-    private List<ItemOrderEntity> orders;
+    private List<OrderItemEntity> item;
 }

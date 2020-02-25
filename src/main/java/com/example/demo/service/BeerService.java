@@ -11,10 +11,11 @@ import com.example.demo.mapper.OrderMapper;
 import com.example.demo.repository.BeerRepository;
 import com.example.demo.repository.OrderRepository;
 import lombok.AllArgsConstructor;
-import org.decimal4j.util.DoubleRounder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,7 +71,7 @@ public class BeerService {
 
         if (optionalBeer.isPresent()) {
             final BeerEntity beerEntity = optionalBeer.get();
-            final List<ItemRecipe> recipe = PartRecipeConverter.destinationToSource(beerEntity.getRecipe());
+            final List<RecipeItem> recipe = PartRecipeConverter.destinationToSource(beerEntity.getRecipe().getItems());
             final boolean thereIsIngredients = warehouseService.thereIsIngredients(recipe);
 
             if (thereIsIngredients) {
@@ -88,14 +89,14 @@ public class BeerService {
     @Transactional
     public OrderEntity sellBeer(final Order order) {
 
-        final boolean thereIsBeer = thereIsBeer(order.getOrders());
+        final boolean thereIsBeer = thereIsBeer(order.getItems());
 
        if (thereIsBeer) {
            final OrderEntity orderEntity = OrderConverter.destinationToSource(order);
-           orderEntity.setPrice(totalPrice(order.getOrders()));
+           orderEntity.setPrice(totalPrice(order.getItems()));
 
 
-           sellBeer(order.getOrders());
+           sellBeer(order.getItems());
 
            orderRepository.save(orderEntity);
            return orderEntity;
@@ -107,8 +108,8 @@ public class BeerService {
 
 
 
-    private boolean thereIsBeer(final List<ItemOrder> orders) {
-        for (ItemOrder part: orders) {
+    private boolean thereIsBeer(final List<OrderItem> orders) {
+        for (OrderItem part: orders) {
             final long id = part.getBeer().getId();
 
             final Optional<BeerEntity> optionalBeerEntity = beerRepository.findById(id);
@@ -125,8 +126,8 @@ public class BeerService {
         return true;
     }
 
-    private void sellBeer(final List<ItemOrder> orders) {
-        for (ItemOrder part: orders) {
+    private void sellBeer(final List<OrderItem> orders) {
+        for (OrderItem part: orders) {
             final long id = part.getBeer().getId();
             final Optional<BeerEntity> optionalBeerEntity = beerRepository.findById(id);
             final BeerEntity beerEntity = optionalBeerEntity.get();
@@ -136,12 +137,15 @@ public class BeerService {
         }
     }
 
-    private double totalPrice(final List<ItemOrder> products) {
+    private double totalPrice(final List<OrderItem> products) {
         int totalPrice = 0;
-        for (ItemOrder order: products)
+        for (OrderItem order: products)
             totalPrice =+ order.getLiters() * order.getBeer().getCostPrice();
 
-        return DoubleRounder.round(totalPrice/100.0, 2);
+        BigDecimal bigDecimal = new BigDecimal(new BigInteger(String.valueOf(totalPrice)), 2);
+
+
+        return bigDecimal.doubleValue();
     }
 
     private void updatedBeer(final BeerEntity beerEntity, final Beer newBeer) {
@@ -156,6 +160,7 @@ public class BeerService {
         if (newBeer.getCostPrice() > 0) beerEntity.setCostPrice(newBeer.getCostPrice());
 
         if (newBeer.getRecipe() != null) {
+
             //TODO придумать что нибудь другое
 
         }

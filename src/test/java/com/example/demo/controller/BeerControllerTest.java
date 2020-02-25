@@ -58,6 +58,8 @@ public class BeerControllerTest extends AbstractControllerTest {
                         "\"costPrice\":5756," +
                         "\"recipe\":null" +
                         "}]"));
+
+
     }
 
     @Test
@@ -79,6 +81,8 @@ public class BeerControllerTest extends AbstractControllerTest {
                         "\"dateManufacture\": \"12.12.2020\", " +
                         "\"shelfLife\": 25, " +
                         "\"costPrice\": 2551}"));
+
+
     }
 
     @Test
@@ -91,7 +95,7 @@ public class BeerControllerTest extends AbstractControllerTest {
         mockMvc.perform(post("/beers/sell")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
-                        "\"orders\":[" +
+                        "\"items\":[" +
                             "{\"beer\":{\"id\":3,\"costPrice\":5415},\"liters\":5}," +
                             "{\"beer\":{\"id\":4,\"costPrice\":9741},\"liters\":4}" +
                         "]}"))
@@ -99,7 +103,7 @@ public class BeerControllerTest extends AbstractControllerTest {
                 .andExpect(content().json("{" +
                         "\"price\":389.64," +
                         "\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
-                        "\"orders\":[" +
+                        "\"item\":[" +
                             "{\"beer\":{\"id\":3,\"costPrice\":5415},\"liters\":5}," +
                             "{\"beer\":{\"id\":4,\"costPrice\":9741},\"liters\":4}" +
                         "]}"));
@@ -117,7 +121,7 @@ public class BeerControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idBeer\" : \"3\", \"liters\" : 2551}"))
 
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
     }
 
     @Test

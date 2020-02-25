@@ -28,8 +28,9 @@ public class BeerEntity {
     private int shelfLife;
     @Column(name = "cost_price")
     private int costPrice;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "beer")
-    private List<ItemRecipeEntity> recipe;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private RecipeEntity recipe;
     @Column(name = "liters_in_stock")
     private int litersInStock;
 }

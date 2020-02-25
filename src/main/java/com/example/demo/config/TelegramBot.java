@@ -34,9 +34,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         try {
             execute(sendMessage);
-        } catch (TelegramApiException ignored) {
-
+        } catch (TelegramApiException e) {
+            //TODO
         }
     }
-
 }

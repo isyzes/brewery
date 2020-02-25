@@ -9,75 +9,6 @@
                             http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
 
     <changeSet id="1" author="Dima">
-        <createTable tableName="AuthInfo">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="login" type="VARCHAR(64)"/>
-            <column name="password" type="VARCHAR(64)"/>
-            <column name="user_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="2" author="Dima">
-        <createTable tableName="Beer">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="VARCHAR(64)"/>
-            <column name="color" type="VARCHAR(64)"/>
-            <column name="fortress" type="DECIMAL"/>
-            <column name="date_manufacture" type="DATE"/>
-            <column name="shelf_life" type="SMALLINT UNSIGNED"/>
-            <column name="cost_price" type="MEDIUMINT UNSIGNED"/>
-            <column name="liters_in_stock" type="INT UNSIGNED"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="3" author="Dima">
-        <createTable tableName="Ingredient">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="VARCHAR(64)"/>
-            <column name="milligrams_in_stock" type="INT UNSIGNED"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="4" author="Dima">
-        <createTable tableName="ItemOrder">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="beer_id" type="BIGINT"/>
-            <column name="liters" type="INT UNSIGNED"/>
-            <column name="order_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="5" author="Dima">
-        <createTable tableName="ItemRecipe">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="ingredient_id" type="BIGINT"/>
-            <column name="milligram" type="INT UNSIGNED"/>
-            <column name="beer_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="6" author="Dima">
-        <createTable tableName="Order">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="price" type="DECIMAL"/>
-            <column name="milligram" type="INT UNSIGNED"/>
-            <column name="user_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="7" author="Dima">
         <createTable tableName="User">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -95,7 +26,94 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="2" author="Dima">
+        <createTable tableName="AuthInfo">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="VARCHAR(64)"/>
+            <column name="password" type="VARCHAR(64)"/>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_AuthInfo_User" references="User(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Dima">
+        <createTable tableName="Ingredient">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)"/>
+            <column name="milligrams_in_stock" type="INT UNSIGNED"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="Dima">
+        <createTable tableName="RecipeItem">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ingredient_id" type="BIGINT">
+                <constraints foreignKeyName="fk_RecipeItem_Ingredient" references="Ingredient(id)" />
+            </column>
+            <column name="milligram" type="INT UNSIGNED"/>
+            <column name="beer_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Dima">
+        <createTable tableName="Recipe">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="Dima">
+        <createTable tableName="Beer">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)"/>
+            <column name="color" type="VARCHAR(64)"/>
+            <column name="fortress" type="DECIMAL"/>
+            <column name="date_manufacture" type="DATE"/>
+            <column name="shelf_life" type="SMALLINT UNSIGNED"/>
+            <column name="cost_price" type="MEDIUMINT UNSIGNED"/>
+            <column name="recipe_id" type="BIGINT">
+                <constraints foreignKeyName="fk_Beer_Recipe" references="Recipe(id)"/>
+            </column>
+            <column name="liters_in_stock" type="INT UNSIGNED"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="Dima">
+        <createTable tableName="OrderEntity">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="8" author="Dima">
+        <createTable tableName="OrderItem">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="beer_id" type="BIGINT">
+                <constraints foreignKeyName="fk_OrderItem_Beer" references="Beer(id)" />
+            </column>
+            <column name="liters" type="INT UNSIGNED"/>
+            <column name="order_id" type="BIGINT">
+                <constraints foreignKeyName="fk_OrderItem_OrderEntity" references="OrderEntity(id)" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="Dima">
         <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1"/>
     </changeSet>
 </databaseChangeLog>

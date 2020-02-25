@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "ItemRecipe")
-public class ItemRecipeEntity {
+@Table(name = "RecipeItem")
+public class RecipeItemEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,7 +17,8 @@ public class ItemRecipeEntity {
     private IngredientEntity ingredientEntity;
     @Column(name = "milligram")
     private int milligram;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "beer_id")
-    private BeerEntity beer;
+    @JoinColumn(name = "recipe_id")
+    private RecipeEntity recipe;
 }

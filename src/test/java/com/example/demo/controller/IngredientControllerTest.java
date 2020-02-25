@@ -21,40 +21,33 @@ import java.util.List;
 
 import static com.example.demo.security.Roles.MANAGER;
 import static org.hamcrest.Matchers.hasLength;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@TestPropertySource("classpath:application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class IngredientControllerTest {
+public class IngredientControllerTest extends AbstractControllerTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
-    @Autowired
-    protected ObjectMapper objectMapper;
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
-    @Autowired
-    protected IngredientRepository ingredientRepository;
-    @SpyBean
-    protected LoadUserDetailService loadUserDetailService;
 
     @Test
     public void testBuyIngredientIsOk() throws Exception {
 
-        ingredientRepository.save(ControllerMockData.getNewIngredient());
+        given(ingredientRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalIngredient());
 
         final String token = signIn();
 
         mockMvc.perform(put("/ingredients/buy").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"idIngredient\" : \"1\", \"milligramsInStock\" : 2551}"))
+                .content("{\"idIngredient\" : \"3\", \"milligramsInStock\" : 2551}"))
 
                 .andExpect(status().isOk());
+
+        //verify()
     }
 
     private String signIn() throws Exception {

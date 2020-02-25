@@ -2,10 +2,10 @@ package com.example.demo.converter;
 
 import com.example.demo.dto.Beer;
 import com.example.demo.dto.Consumer;
-import com.example.demo.dto.ItemOrder;
+import com.example.demo.dto.OrderItem;
 import com.example.demo.dto.Order;
 import com.example.demo.entity.BeerEntity;
-import com.example.demo.entity.ItemOrderEntity;
+import com.example.demo.entity.OrderItemEntity;
 import com.example.demo.entity.OrderEntity;
 import com.example.demo.entity.UserEntity;
 
@@ -17,7 +17,7 @@ public class OrderConverter {
         OrderEntity orderEntity = new OrderEntity();
 
         orderEntity.setConsumer(destinationToSource(order.getConsumer()));
-        orderEntity.setOrders(destinationToSource(order.getOrders()));
+        orderEntity.setItem(destinationToSource(order.getItems()));
 
         return orderEntity;
     }
@@ -30,15 +30,15 @@ public class OrderConverter {
         return userEntity;
     }
 
-    private static List<ItemOrderEntity> destinationToSource(List<ItemOrder> itemOrders) {
-        List<ItemOrderEntity> result = new ArrayList<>();
+    private static List<OrderItemEntity> destinationToSource(List<OrderItem> orderItems) {
+        List<OrderItemEntity> result = new ArrayList<>();
 
-        for (ItemOrder item: itemOrders) {
-            ItemOrderEntity itemOrderEntity = new ItemOrderEntity();
-            itemOrderEntity.setId(item.getId());
-            itemOrderEntity.setBeer(destinationToSource(item.getBeer()));
-            itemOrderEntity.setLiters(item.getLiters());
-            result.add(itemOrderEntity);
+        for (OrderItem item: orderItems) {
+            OrderItemEntity orderItemEntity = new OrderItemEntity();
+            orderItemEntity.setId(item.getId());
+            orderItemEntity.setBeer(destinationToSource(item.getBeer()));
+            orderItemEntity.setLiters(item.getLiters());
+            result.add(orderItemEntity);
         }
         return result;
     }

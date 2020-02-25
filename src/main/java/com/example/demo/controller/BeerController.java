@@ -23,10 +23,11 @@ public class BeerController {
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "updated/{idBeer}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Beer updatedBeer(@RequestBody final Beer newBeer, @PathVariable final long idBeer) throws UpdatedBeerException {
+        //https://github.com/wgdetective/java-training-example/blob/origin/feature/lesson_5/src/main/java/com/gpsolutions/edu/java/training/example/controller/ExceptionControllerAdvice.java
         return service.updatedBeer(newBeer, idBeer);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "updated")
     public void updatedLitersInStockBeer(@RequestBody final OrderCreatedBeer orderCreatedBeer) {
         service.updatedLitersInStockBeer(orderCreatedBeer);
@@ -41,6 +42,7 @@ public class BeerController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "sell", consumes = MediaType.APPLICATION_JSON_VALUE)
     public OrderEntity sellBeer(@RequestBody final Order order) {
+        //вернуть другую сущность
         return service.sellBeer(order);
     }
 }
