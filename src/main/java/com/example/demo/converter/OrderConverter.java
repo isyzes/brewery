@@ -1,9 +1,8 @@
 package com.example.demo.converter;
 
-import com.example.demo.dto.beer.Beer;
 import com.example.demo.dto.Consumer;
 import com.example.demo.dto.order.OrderItem;
-import com.example.demo.dto.order.Order;
+import com.example.demo.dto.order.RequestOrder;
 import com.example.demo.entity.BeerEntity;
 import com.example.demo.entity.OrderItemEntity;
 import com.example.demo.entity.OrderEntity;
@@ -12,19 +11,21 @@ import com.example.demo.entity.UserEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.demo.security.Roles.CONSUMER;
+
 public class OrderConverter {
-    public static OrderEntity destinationToSource(Order order) {
+    public static OrderEntity destinationToSource(RequestOrder requestOrder) {
         OrderEntity orderEntity = new OrderEntity();
 
-        orderEntity.setConsumer(destinationToSource(order.getConsumer()));
-        orderEntity.setItem(destinationToSource(order.getItems()));
+        orderEntity.setConsumer(destinationToSource(requestOrder.getConsumer()));
+//        orderEntity.setItem(destinationToSource(requestOrder.getItems()));
 
         return orderEntity;
     }
 
     private static UserEntity destinationToSource(Consumer consumer) {
         UserEntity userEntity = new UserEntity();
-
+        userEntity.setUserRole(CONSUMER);
         userEntity.setId(consumer.getId());
         userEntity.setFio(consumer.getFio());
         return userEntity;
@@ -36,7 +37,7 @@ public class OrderConverter {
         for (OrderItem item: orderItems) {
             OrderItemEntity orderItemEntity = new OrderItemEntity();
 
-            orderItemEntity.setBeer(destinationToSource(item.getIdBeer()));
+//            orderItemEntity.setBeer(destinationToSource(item.getIdBeer()));
             orderItemEntity.setLiters(item.getLiters());
             result.add(orderItemEntity);
         }

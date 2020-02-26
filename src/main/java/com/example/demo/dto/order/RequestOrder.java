@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class Order {
+public class RequestOrder {
     private Consumer consumer;
     private List<OrderItem> items;
 }

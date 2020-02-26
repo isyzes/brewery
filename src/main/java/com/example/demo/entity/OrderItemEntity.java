@@ -17,7 +17,7 @@ public class OrderItemEntity {
     private BeerEntity beer;
     @Column(name = "liters")
     private int liters;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private OrderEntity order;
 }

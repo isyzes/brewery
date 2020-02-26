@@ -19,5 +19,5 @@ public class OrderEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity consumer;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
-    private List<OrderItemEntity> item;
+    private List<OrderItemEntity> items;
 }

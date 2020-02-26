@@ -1,10 +1,7 @@
 package com.example.demo.mockdata;
 
-import com.example.demo.controller.AbstractControllerTest;
 import com.example.demo.entity.*;
 import com.example.demo.security.Roles;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,9 +9,6 @@ import java.util.Optional;
 
 public class ControllerMockData {
     public final static long ID = 3;
-//    @Autowired
-//    protected static PasswordEncoder passwordEncoder;
-
 
     public static Optional<BeerEntity> getNewOptionalBeer() {
         return Optional.of(getNewBeer());
@@ -160,7 +154,7 @@ public class ControllerMockData {
         final OrderEntity orderEntity = new OrderEntity();
 
         orderEntity.setPrice(26.28);
-        orderEntity.setItem(getNewOrderItemEntity());
+        orderEntity.setItems(getNewListOrderItemEntity());
         orderEntity.setConsumer(getNewConsumerEntity());
 
         return orderEntity;
@@ -174,7 +168,7 @@ public class ControllerMockData {
         return userEntity;
     }
 
-    public static List<OrderItemEntity> getNewOrderItemEntity() {
+    public static List<OrderItemEntity> getNewListOrderItemEntity() {
         final OrderItemEntity firstOrderItemEntity = new OrderItemEntity();
         firstOrderItemEntity.setBeer(getNewBeer(3));
         firstOrderItemEntity.setLiters(5);
@@ -187,14 +181,6 @@ public class ControllerMockData {
 
     }
 
-    public static AuthInfoEntity getNewAuthInfoEntity() {
-        final AuthInfoEntity authInfoEntity = new AuthInfoEntity();
-        authInfoEntity.setLogin("vasya@email.com");
-//        authInfoEntity.setPassword();
-        authInfoEntity.setUser(getAuthNewConsumerEntity());
-        return authInfoEntity;
-    }
-
     public static UserEntity getAuthNewConsumerEntity() {
         final UserEntity userEntity = new UserEntity();
         userEntity.setEmail("vasya@email.com");
@@ -204,6 +190,12 @@ public class ControllerMockData {
         return userEntity;
     }
 
+    public static OrderItemEntity getNewOrderItemEntity(long idBeer) {
+        OrderItemEntity orderItemEntity = new OrderItemEntity();
+        orderItemEntity.setOrder(getNewOrderEntity());
+        orderItemEntity.setLiters(234);
+        orderItemEntity.setBeer(getNewBeer(idBeer));
 
-
+        return orderItemEntity;
+    }
 }

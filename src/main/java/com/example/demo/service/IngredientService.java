@@ -41,17 +41,16 @@ public class IngredientService {
         }
     }
 
-    public boolean thereIsIngredients (final List<RecipeItem> recipe) {
+    public boolean thereIsIngredients (final List<RecipeItem> recipe, int liters) {
         for (RecipeItem part: recipe) {
             final long id = part.getIngredient().getId();
 
-            //TODO: remove database access in a loop
             final Optional<IngredientEntity> ingredientEntity = ingredientRepository.findById(id);
 
             if (ingredientEntity.isPresent()) {
                 final IngredientEntity ingredient = ingredientEntity.get();
 
-                if (ingredient.getMilligramsInStock() < part.getMilligram())
+                if (ingredient.getMilligramsInStock() < (part.getMilligram() * liters))
                     return false;
 
             } else return false;

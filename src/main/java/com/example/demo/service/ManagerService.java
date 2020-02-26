@@ -10,10 +10,11 @@ public class ManagerService {
     private final TelegramBot bot;
 
     public void setNeedBeer(boolean needBeer) {
+        bot.sendMessage("needBeer");
 
     }
 
     public void setNeedIngredient(boolean needIngredient) {
-
+        bot.sendMessage("needIngredient");
     }
 }

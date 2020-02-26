@@ -47,6 +47,8 @@ public abstract class AbstractControllerTest {
     protected IngredientRepository ingredientRepository;
     @MockBean
     protected UserRepository userRepository;
+    @MockBean
+    protected OrderItemRepository orderItemRepository;
 
     @SpyBean
     protected LoadUserDetailService loadUserDetailService;
