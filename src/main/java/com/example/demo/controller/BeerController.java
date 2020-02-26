@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.Beer;
-import com.example.demo.dto.Order;
-import com.example.demo.dto.OrderCreatedBeer;
+import com.example.demo.dto.beer.Beer;
+import com.example.demo.dto.order.Order;
+import com.example.demo.dto.beer.OrderCreatedBeer;
+import com.example.demo.dto.beer.ResponseUpdatedLitersBeer;
+import com.example.demo.dto.order.ResponseOrder;
 import com.example.demo.entity.OrderEntity;
+import com.example.demo.exception.NeedBeerException;
 import com.example.demo.exception.UpdatedBeerException;
 import com.example.demo.service.BeerService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +32,8 @@ public class BeerController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "updated")
-    public void updatedLitersInStockBeer(@RequestBody final OrderCreatedBeer orderCreatedBeer) {
-        service.updatedLitersInStockBeer(orderCreatedBeer);
+    public ResponseUpdatedLitersBeer updatedLitersBeerInStock(@RequestBody final OrderCreatedBeer orderCreatedBeer) {
+        return service.updatedLitersInStockBeer(orderCreatedBeer);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -41,8 +44,7 @@ public class BeerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "sell", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public OrderEntity sellBeer(@RequestBody final Order order) {
-        //вернуть другую сущность
+    public ResponseOrder sellBeer(@RequestBody final Order order) throws NeedBeerException {
         return service.sellBeer(order);
     }
 }

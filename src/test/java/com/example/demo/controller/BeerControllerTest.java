@@ -2,30 +2,32 @@ package com.example.demo.controller;
 
 import com.example.demo.mockdata.ControllerMockData;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import static com.example.demo.security.Roles.EMPLOYEE;
-import static com.example.demo.security.Roles.MANAGER;
+import static com.example.demo.security.Roles.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BeerControllerTest extends AbstractControllerTest {
 
     @Test
-    public void testGetBeersIsOk() throws Exception {
-        final String token = signIn(MANAGER);
-
+    void testGetBeersIsOk() throws Exception {
+        // given
         given(beerRepository.findAll()).willReturn(ControllerMockData.getBeerEntityList());
 
+        // when
+        final String token = signIn(MANAGER);
         mockMvc.perform(get("/beers/list").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON))
-
+        // then
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
                         "{" +
@@ -59,7 +61,7 @@ public class BeerControllerTest extends AbstractControllerTest {
                         "\"recipe\":null" +
                         "}]"));
 
-
+        verify(beerRepository, Mockito.times(1)).findAll();
     }
 
     @Test
@@ -87,31 +89,34 @@ public class BeerControllerTest extends AbstractControllerTest {
 
     @Test
     public void testSellBeerIsOk() throws Exception {
+        final String token = signIn(CONSUMER);
 
         given(beerRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalBeer(3L));
 
         given(beerRepository.findById(4L)).willReturn(ControllerMockData.getNewOptionalBeer(4L));
 
-        mockMvc.perform(post("/beers/sell")
+        given(orderRepository.save(ControllerMockData.getNewOrderEntity())).willReturn(ControllerMockData.getNewOrderEntity());
+
+        mockMvc.perform(post("/beers/sell").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
                         "\"items\":[" +
-                            "{\"beer\":{\"id\":3,\"costPrice\":5415},\"liters\":5}," +
-                            "{\"beer\":{\"id\":4,\"costPrice\":9741},\"liters\":4}" +
+                            "{\"idBeer\":3, \"liters\":5}," +
+                            "{\"idBeer\":4, \"liters\":4}" +
                         "]}"))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{" +
-                        "\"price\":389.64," +
+                        "\"price\":26.28," +
                         "\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
-                        "\"item\":[" +
-                            "{\"beer\":{\"id\":3,\"costPrice\":5415},\"liters\":5}," +
-                            "{\"beer\":{\"id\":4,\"costPrice\":9741},\"liters\":4}" +
+                        "\"items\":[" +
+                            "{\"idBeer\":3,\"liters\":5}," +
+                            "{\"idBeer\":4,\"liters\":4}" +
                         "]}"));
     }
 
     @Test
-    public void testCreatedBeerIsOk() throws Exception {
-        final String token = signIn(EMPLOYEE);
+    public void testUpdatedLitersBeerInStockIsOk() throws Exception {
+        final String token = signIn(MANAGER);
 
         given(beerRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getNewOptionalBeer());
 
@@ -119,9 +124,10 @@ public class BeerControllerTest extends AbstractControllerTest {
 
         mockMvc.perform(put("/beers/updated").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"idBeer\" : \"3\", \"liters\" : 2551}"))
+                .content("{\"idBeer\" : 3, \"liters\" : 2551}"))
 
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"idBeer\" : 3, \"nameBeer\" : \"Grimbergen\", \"totalLiters\" : 8776}}"));
     }
 
     @Test

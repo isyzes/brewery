@@ -1,9 +1,9 @@
 package com.example.demo.converter;
 
-import com.example.demo.dto.Beer;
+import com.example.demo.dto.beer.Beer;
 import com.example.demo.dto.Consumer;
-import com.example.demo.dto.OrderItem;
-import com.example.demo.dto.Order;
+import com.example.demo.dto.order.OrderItem;
+import com.example.demo.dto.order.Order;
 import com.example.demo.entity.BeerEntity;
 import com.example.demo.entity.OrderItemEntity;
 import com.example.demo.entity.OrderEntity;
@@ -35,18 +35,17 @@ public class OrderConverter {
 
         for (OrderItem item: orderItems) {
             OrderItemEntity orderItemEntity = new OrderItemEntity();
-            orderItemEntity.setId(item.getId());
-            orderItemEntity.setBeer(destinationToSource(item.getBeer()));
+
+            orderItemEntity.setBeer(destinationToSource(item.getIdBeer()));
             orderItemEntity.setLiters(item.getLiters());
             result.add(orderItemEntity);
         }
         return result;
     }
 
-    private static BeerEntity destinationToSource(Beer beer) {
+    private static BeerEntity destinationToSource(long id) {
         BeerEntity beerEntity = new BeerEntity();
-        beerEntity.setId(beer.getId());
-        beerEntity.setCostPrice(beer.getCostPrice());
+        beerEntity.setId(id);
         return beerEntity;
     }
 }

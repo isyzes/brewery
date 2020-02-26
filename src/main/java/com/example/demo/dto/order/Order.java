@@ -1,5 +1,6 @@
-package com.example.demo.dto;
+package com.example.demo.dto.order;
 
+import com.example.demo.dto.Consumer;
 import lombok.Builder;
 import lombok.Data;
 

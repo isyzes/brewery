@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Employee;
-import com.example.demo.service.EmployeeService;
+import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(value = "/staff/")
 public class EmployeeController {
-    private final EmployeeService service;
+    private final UserService service;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "employee/created", consumes = MediaType.APPLICATION_JSON_VALUE)

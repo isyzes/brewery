@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.Order;
+import com.example.demo.dto.order.Order;
 import com.example.demo.entity.OrderEntity;
 import org.mapstruct.Mapper;
 

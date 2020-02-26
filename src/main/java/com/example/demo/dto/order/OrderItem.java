@@ -1,10 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.dto.order;
 
 import lombok.Data;
 
 @Data
 public class OrderItem {
-    private long id;
-    private Beer beer;
+    private long idBeer;
     private int liters;
 }

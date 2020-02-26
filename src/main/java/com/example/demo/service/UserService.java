@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class EmployeeService {
+public class UserService {
     private final AuthInfoRepository authInfoRepository;
     private final UserRepository userRepository;
 

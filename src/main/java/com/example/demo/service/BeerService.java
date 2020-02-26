@@ -3,8 +3,15 @@ package com.example.demo.service;
 import com.example.demo.converter.OrderConverter;
 import com.example.demo.converter.PartRecipeConverter;
 import com.example.demo.dto.*;
+import com.example.demo.dto.beer.Beer;
+import com.example.demo.dto.beer.OrderCreatedBeer;
+import com.example.demo.dto.beer.ResponseUpdatedLitersBeer;
+import com.example.demo.dto.order.Order;
+import com.example.demo.dto.order.OrderItem;
+import com.example.demo.dto.order.ResponseOrder;
 import com.example.demo.entity.BeerEntity;
 import com.example.demo.entity.OrderEntity;
+import com.example.demo.exception.NeedBeerException;
 import com.example.demo.exception.UpdatedBeerException;
 import com.example.demo.mapper.BeerRequestMapper;
 import com.example.demo.mapper.OrderMapper;
@@ -63,9 +70,11 @@ public class BeerService {
     }
 
     @Transactional
-    public void updatedLitersInStockBeer(final OrderCreatedBeer orderCreatedBeer) {
+    public ResponseUpdatedLitersBeer updatedLitersInStockBeer(final OrderCreatedBeer orderCreatedBeer) {
         final long idBeer = orderCreatedBeer.getIdBeer();
         final int liters = orderCreatedBeer.getLiters();
+        final ResponseUpdatedLitersBeer response = new ResponseUpdatedLitersBeer();
+        response.setIdBeer(idBeer);
 
         final Optional<BeerEntity> optionalBeer = beerRepository.findById(idBeer);
 
@@ -74,35 +83,49 @@ public class BeerService {
             final List<RecipeItem> recipe = PartRecipeConverter.destinationToSource(beerEntity.getRecipe().getItems());
             final boolean thereIsIngredients = warehouseService.thereIsIngredients(recipe);
 
+            response.setNameBeer(beerEntity.getName());
+
             if (thereIsIngredients) {
 
                 warehouseService.takeIngredientsForBeer(recipe);
                 final int totalLitersInStock = beerEntity.getLitersInStock() + liters;
+
+                response.setTotalLiters(totalLitersInStock);
+
                 beerEntity.setLitersInStock(totalLitersInStock);
                 beerRepository.save(beerEntity);
             } else {
                 managerService.setNeedIngredient(true);
             }
         }
+
+        return response;
     }
 
     @Transactional
-    public OrderEntity sellBeer(final Order order) {
+    public ResponseOrder sellBeer(final Order order) throws NeedBeerException {
+
 
         final boolean thereIsBeer = thereIsBeer(order.getItems());
 
        if (thereIsBeer) {
            final OrderEntity orderEntity = OrderConverter.destinationToSource(order);
-           orderEntity.setPrice(totalPrice(order.getItems()));
+           final double totalPrice = totalPrice(order.getItems());
 
-
+           orderEntity.setPrice(totalPrice);
            sellBeer(order.getItems());
 
            orderRepository.save(orderEntity);
-           return orderEntity;
+
+           final ResponseOrder response = new ResponseOrder();
+           response.setPrice(totalPrice);
+           response.setConsumer(order.getConsumer());
+           response.setItems(order.getItems());
+           return response;
        } else {
            managerService.setNeedBeer(true);
-           return new OrderEntity();
+
+           throw new NeedBeerException("Not enough beer in stock!");
         }
     }
 
@@ -110,7 +133,7 @@ public class BeerService {
 
     private boolean thereIsBeer(final List<OrderItem> orders) {
         for (OrderItem part: orders) {
-            final long id = part.getBeer().getId();
+            final long id = part.getIdBeer();
 
             final Optional<BeerEntity> optionalBeerEntity = beerRepository.findById(id);
 
@@ -128,7 +151,7 @@ public class BeerService {
 
     private void sellBeer(final List<OrderItem> orders) {
         for (OrderItem part: orders) {
-            final long id = part.getBeer().getId();
+            final long id = part.getIdBeer();
             final Optional<BeerEntity> optionalBeerEntity = beerRepository.findById(id);
             final BeerEntity beerEntity = optionalBeerEntity.get();
             final int totalLitersInStock = beerEntity.getLitersInStock() - part.getLiters();
@@ -139,12 +162,12 @@ public class BeerService {
 
     private double totalPrice(final List<OrderItem> products) {
         int totalPrice = 0;
-        for (OrderItem order: products)
-            totalPrice =+ order.getLiters() * order.getBeer().getCostPrice();
+        for (OrderItem order: products) {
+            BeerEntity beerEntity = beerRepository.findById(order.getIdBeer()).get();
+            totalPrice =+ order.getLiters() * beerEntity.getCostPrice();
+        }
 
         BigDecimal bigDecimal = new BigDecimal(new BigInteger(String.valueOf(totalPrice)), 2);
-
-
         return bigDecimal.doubleValue();
     }
 

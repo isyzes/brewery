@@ -5,7 +5,7 @@ import com.example.demo.dto.UserSignInRequest;
 import com.example.demo.dto.UserSignInResponse;
 import com.example.demo.exception.SuchUserAlreadyExistException;
 import com.example.demo.security.JwtUtil;
-import com.example.demo.service.EmployeeService;
+import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,12 +27,12 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    private final EmployeeService employeeService;
+    private final UserService userService;
 
     @PostMapping(value = "/employee/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public void singUp(@RequestBody final EmployeeSignUpRequest request) throws SuchUserAlreadyExistException {
-        employeeService.signUp(request);
+        userService.signUp(request);
     }
 
     @PostMapping(value = "/employee/sign-in", consumes = MediaType.APPLICATION_JSON_VALUE)

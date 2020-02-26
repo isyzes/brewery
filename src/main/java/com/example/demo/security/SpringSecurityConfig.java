@@ -11,8 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.example.demo.security.Roles.EMPLOYEE;
-import static com.example.demo.security.Roles.MANAGER;
+import static com.example.demo.security.Roles.*;
 
 
 @EnableWebSecurity
@@ -26,7 +25,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/test", "/beers/sell", "/employee/sign-in", "/employee/sign-up").permitAll()
+                    .antMatchers("/test", "/employee/sign-in", "/employee/sign-up").permitAll()
+                    .antMatchers("/beers/sell").hasRole(CONSUMER.name())
                     .antMatchers( "/beers/make/**").hasRole(EMPLOYEE.name())
                     .antMatchers( "/**").hasRole(MANAGER.name())
                     .anyRequest().authenticated()

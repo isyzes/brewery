@@ -151,4 +151,35 @@ public class ControllerMockData {
         return List.of(firstEmployee, secondEmployee, thirdEmployee);
     }
 
+    public static OrderEntity getNewOrderEntity() {
+        final OrderEntity orderEntity = new OrderEntity();
+
+        orderEntity.setPrice(26.28);
+        orderEntity.setItem(getNewOrderItemEntity());
+        orderEntity.setConsumer(getNewConsumerEntity());
+
+        return orderEntity;
+    }
+
+    public static UserEntity getNewConsumerEntity() {
+        final UserEntity userEntity = new UserEntity();
+        userEntity.setId(4L);
+        userEntity.setFio("Easy Pub");
+        userEntity.setUserRole(Roles.CONSUMER);
+        return userEntity;
+    }
+
+    public static List<OrderItemEntity> getNewOrderItemEntity() {
+        final OrderItemEntity firstOrderItemEntity = new OrderItemEntity();
+        firstOrderItemEntity.setBeer(getNewBeer(3));
+        firstOrderItemEntity.setLiters(5);
+
+        final OrderItemEntity secondOrderItemEntity = new OrderItemEntity();
+        secondOrderItemEntity.setBeer(getNewBeer(4));
+        secondOrderItemEntity.setLiters(4);
+
+        return List.of(firstOrderItemEntity, secondOrderItemEntity);
+
+    }
+
 }

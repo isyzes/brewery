@@ -1,11 +1,11 @@
-package com.example.demo.dto;
+package com.example.demo.dto.beer;
 
+import com.example.demo.dto.Recipe;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
@@ -16,8 +16,8 @@ public class Beer {
     private double fortress;
     @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate dateManufacture;
-    private int shelfLife;//(дней)
-    private int costPrice;//в копейках
+    private int shelfLife;
+    private int costPrice;
     private Recipe recipe;
 }
 
