@@ -20,7 +20,7 @@ public class EmployeeControllerTest extends AbstractControllerTest {
 
     @Test
     public void testEmployeeTakeIsOk() throws Exception {
-
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         final String token = signIn(MANAGER);
 
         mockMvc.perform(post("/staff/employee/created").header("Authorization", token)
@@ -34,6 +34,7 @@ public class EmployeeControllerTest extends AbstractControllerTest {
 
     @Test
     public void testEmployeeToDismissIsOk() throws Exception {
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         final String token = signIn(MANAGER);
 
         given(userRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getOptionalEmployeeEntity());
@@ -45,6 +46,7 @@ public class EmployeeControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetStaffListIsOk() throws Exception {
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         final String token = signIn(MANAGER);
         given(userRepository.findAllByUserRole(EMPLOYEE)).willReturn(ControllerMockData.getEmployeeEntities());
         mockMvc.perform(get("/staff/list").header("Authorization", token))

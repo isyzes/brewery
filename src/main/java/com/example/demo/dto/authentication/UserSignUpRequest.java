@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.authentication;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 
 @Data
-public class EmployeeSignUpRequest {
+public class UserSignUpRequest {
     private String email;
     private String password;
     private String fio;

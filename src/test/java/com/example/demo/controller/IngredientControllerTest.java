@@ -1,32 +1,20 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserSignInResponse;
+import com.example.demo.entity.IngredientEntity;
 import com.example.demo.mockdata.ControllerMockData;
-import com.example.demo.repository.IngredientRepository;
-import com.example.demo.security.LoadUserDetailService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Optional;
 
 import static com.example.demo.security.Roles.MANAGER;
-import static org.hamcrest.Matchers.hasLength;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -36,39 +24,42 @@ public class IngredientControllerTest extends AbstractControllerTest {
 
     @Test
     public void testBuyIngredientIsOk() throws Exception {
-
+        // given
+        final IngredientEntity save = ControllerMockData.getNewIngredient(650402);
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(ingredientRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalIngredient());
+        given(ingredientRepository.save(save)).willReturn(save);
 
-        final String token = signIn();
-
+        final String token = signIn(MANAGER);
+        // when
         mockMvc.perform(put("/ingredients/buy").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idIngredient\" : \"3\", \"milligramsInStock\" : 2551}"))
-
-                .andExpect(status().isOk());
-
-        //verify()
-    }
-
-    private String signIn() throws Exception {
-        final User user = new User("vasya@email.com", passwordEncoder.encode("qwerty"),
-                List.of(new SimpleGrantedAuthority("ROLE_" + MANAGER.name())));
-
-        willReturn(user).given(loadUserDetailService).loadUserByUsername("vasya@email.com");
-
-        final String response = mockMvc.perform(post("/employee/sign-in")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"email\" : \"vasya@email.com\",\n" +
-                        "  \"password\" : \"qwerty\"\n" +
-                        "}"))
-
+        // then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("token", hasLength(144)))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(content().json("{\"idIngredient\":3,\"totalMilligramsInStock\":650402}"));
 
-        return "Bearer " + objectMapper.readValue(response, UserSignInResponse.class).getToken();
+        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
+        verify(ingredientRepository, Mockito.times(1)).findById(3L);
+        verify(ingredientRepository, Mockito.times(1)).save(save);
     }
 
+    @Test
+    public void testBuyIngredientIsBadRequest() throws Exception {
+        // given
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
+        given(ingredientRepository.findById(2L)).willReturn(Optional.empty());
 
+
+        final String token = signIn(MANAGER);
+        // when
+        mockMvc.perform(put("/ingredients/buy").header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"idIngredient\" : \"2\", \"milligramsInStock\" : 2551}"))
+                // then
+                .andExpect(status().isBadRequest());
+
+        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
+        verify(ingredientRepository, Mockito.times(1)).findById(2L);
+    }
 }

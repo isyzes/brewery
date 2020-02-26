@@ -1,6 +1,6 @@
 package com.example.demo.converter;
 
-import com.example.demo.dto.Ingredient;
+import com.example.demo.dto.ingredient.Ingredient;
 import com.example.demo.dto.RecipeItem;
 import com.example.demo.entity.IngredientEntity;
 import com.example.demo.entity.RecipeItemEntity;

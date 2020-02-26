@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserSignInResponse;
+import com.example.demo.dto.authentication.UserSignInResponse;
 import com.example.demo.entity.AuthInfoEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.repository.*;

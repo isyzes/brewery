@@ -1,7 +1,10 @@
 package com.example.demo.mockdata;
 
+import com.example.demo.controller.AbstractControllerTest;
 import com.example.demo.entity.*;
 import com.example.demo.security.Roles;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,6 +12,8 @@ import java.util.Optional;
 
 public class ControllerMockData {
     public final static long ID = 3;
+//    @Autowired
+//    protected static PasswordEncoder passwordEncoder;
 
 
     public static Optional<BeerEntity> getNewOptionalBeer() {
@@ -20,7 +25,7 @@ public class ControllerMockData {
     }
 
     public static Optional<IngredientEntity> getNewOptionalIngredient() {
-        return Optional.of(getNewIngredient());
+        return Optional.of(getNewIngredient(647851));
     }
 
     public static BeerEntity getNewBeer() {
@@ -53,15 +58,15 @@ public class ControllerMockData {
         final RecipeItemEntity partRecipeEntity = new RecipeItemEntity();
         partRecipeEntity.setId(ID);
         partRecipeEntity.setMilligram(5);
-        partRecipeEntity.setIngredientEntity(getNewIngredient());
+        partRecipeEntity.setIngredientEntity(getNewIngredient(647851));
         return partRecipeEntity;
     }
 
-    public static IngredientEntity getNewIngredient() {
+    public static IngredientEntity getNewIngredient(final int milligramsInStock) {
         final IngredientEntity ingredientEntity = new IngredientEntity();
         ingredientEntity.setId(ID);
         ingredientEntity.setName("Water");
-        ingredientEntity.setMilligramsInStock(647851);
+        ingredientEntity.setMilligramsInStock(milligramsInStock);
         return ingredientEntity;
     }
 
@@ -181,5 +186,24 @@ public class ControllerMockData {
         return List.of(firstOrderItemEntity, secondOrderItemEntity);
 
     }
+
+    public static AuthInfoEntity getNewAuthInfoEntity() {
+        final AuthInfoEntity authInfoEntity = new AuthInfoEntity();
+        authInfoEntity.setLogin("vasya@email.com");
+//        authInfoEntity.setPassword();
+        authInfoEntity.setUser(getAuthNewConsumerEntity());
+        return authInfoEntity;
+    }
+
+    public static UserEntity getAuthNewConsumerEntity() {
+        final UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("vasya@email.com");
+        userEntity.setBirthDate(LocalDate.of(1995, 1, 19));
+        userEntity.setFio("Пупкин Василий Иванович");
+        userEntity.setUserRole(Roles.CONSUMER);
+        return userEntity;
+    }
+
+
 
 }

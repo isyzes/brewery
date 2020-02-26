@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.IngredientRequestOrder;
-import com.example.demo.exception.BuyIngredientException;
+import com.example.demo.dto.ingredient.IngredientRequestOrder;
+import com.example.demo.dto.ingredient.IngredientResponseOrder;
+import com.example.demo.exception.BreweryIngredientException;
 import com.example.demo.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class IngredientController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "buy", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void buyIngredient(@RequestBody final IngredientRequestOrder ingredientRequestOrder) throws BuyIngredientException {
-        service.buyIngredient(ingredientRequestOrder);
+    public IngredientResponseOrder buyIngredient(@RequestBody final IngredientRequestOrder ingredientRequestOrder) throws BreweryIngredientException {
+        return service.buyIngredient(ingredientRequestOrder);
     }
 }

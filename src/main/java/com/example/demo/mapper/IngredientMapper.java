@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.Ingredient;
+import com.example.demo.dto.ingredient.Ingredient;
 import com.example.demo.entity.IngredientEntity;
 import org.mapstruct.Mapper;
 

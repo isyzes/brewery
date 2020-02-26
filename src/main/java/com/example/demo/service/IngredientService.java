@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.IngredientRequestOrder;
+import com.example.demo.dto.ingredient.IngredientRequestOrder;
 import com.example.demo.dto.RecipeItem;
+import com.example.demo.dto.ingredient.IngredientResponseOrder;
 import com.example.demo.entity.IngredientEntity;
-import com.example.demo.exception.BuyIngredientException;
+import com.example.demo.exception.BreweryIngredientException;
 import com.example.demo.repository.IngredientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +18,8 @@ import java.util.Optional;
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
 
-    public void buyIngredient(final IngredientRequestOrder ingredientRequestOrder) throws BuyIngredientException {
+    @Transactional
+    public IngredientResponseOrder buyIngredient(final IngredientRequestOrder ingredientRequestOrder) throws BreweryIngredientException {
         final long ingredientId = ingredientRequestOrder.getIdIngredient();
         final int needBuyMilligram = ingredientRequestOrder.getMilligramsInStock();
         final Optional<IngredientEntity> optionalIngredientEntity = ingredientRepository.findById(ingredientId);
@@ -25,10 +28,16 @@ public class IngredientService {
             final IngredientEntity ingredientEntity = optionalIngredientEntity.get();
             final int totalMilligramsInStock = ingredientEntity.getMilligramsInStock() + needBuyMilligram;
 
+            final IngredientResponseOrder response = new IngredientResponseOrder();
+            response.setIdIngredient(ingredientId);
+            response.setTotalMilligramsInStock(totalMilligramsInStock);
+
             ingredientEntity.setMilligramsInStock(totalMilligramsInStock);
             ingredientRepository.save(ingredientEntity);
+
+            return response;
         } else {
-            throw new BuyIngredientException("Ingredient with id=" + ingredientId + " not found!");
+            throw new BreweryIngredientException("Ingredient with id=" + ingredientId + " not found!");
         }
     }
 

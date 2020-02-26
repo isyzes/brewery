@@ -21,6 +21,7 @@ public class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testGetBeersIsOk() throws Exception {
         // given
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findAll()).willReturn(ControllerMockData.getBeerEntityList());
 
         // when
@@ -66,10 +67,11 @@ public class BeerControllerTest extends AbstractControllerTest {
 
     @Test
     public void testUpdatedBeerIsOk() throws Exception {
-        final String token = signIn(MANAGER);
 
+
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getNewOptionalBeer());
-
+        final String token = signIn(MANAGER);
         mockMvc.perform(put("/beers/updated/3").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\" : \"Grimbergen\", \"costPrice\" : 2551}"))
@@ -89,14 +91,16 @@ public class BeerControllerTest extends AbstractControllerTest {
 
     @Test
     public void testSellBeerIsOk() throws Exception {
-        final String token = signIn(CONSUMER);
+
+
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
 
         given(beerRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalBeer(3L));
 
         given(beerRepository.findById(4L)).willReturn(ControllerMockData.getNewOptionalBeer(4L));
 
         given(orderRepository.save(ControllerMockData.getNewOrderEntity())).willReturn(ControllerMockData.getNewOrderEntity());
-
+        final String token = signIn(CONSUMER);
         mockMvc.perform(post("/beers/sell").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
@@ -116,12 +120,14 @@ public class BeerControllerTest extends AbstractControllerTest {
 
     @Test
     public void testUpdatedLitersBeerInStockIsOk() throws Exception {
-        final String token = signIn(MANAGER);
+
+
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
 
         given(beerRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getNewOptionalBeer());
 
         given(ingredientRepository.findById(ControllerMockData.ID)).willReturn(ControllerMockData.getNewOptionalIngredient());
-
+        final String token = signIn(MANAGER);
         mockMvc.perform(put("/beers/updated").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idBeer\" : 3, \"liters\" : 2551}"))
@@ -132,6 +138,7 @@ public class BeerControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetBeerListIsEmpty() throws Exception {
+        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         final String token = signIn(MANAGER);
 
         mockMvc.perform(get("/beers/list").header("Authorization", token)
