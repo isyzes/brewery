@@ -2,6 +2,8 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,6 +30,8 @@ public class BeerEntity {
     private int shelfLife;
     @Column(name = "cost_price")
     private int costPrice;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(optional = false)
     @JoinColumn(name = "recipe_id", nullable = false)
     private RecipeEntity recipe;

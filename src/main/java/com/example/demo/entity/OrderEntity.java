@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,9 +17,13 @@ public class OrderEntity {
     private long id;
     @Column(name = "price")
     private double price;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity consumer;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<OrderItemEntity> items;
 }

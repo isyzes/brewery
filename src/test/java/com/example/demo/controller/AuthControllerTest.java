@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.entity.AuthInfoEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.mockdata.ControllerMockData;
+
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
@@ -25,14 +27,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AuthControllerTest extends AbstractControllerTest {
 
     @Test
-    public void testEmployeeSignUpIsCreated() throws Exception {
+    void testEmployeeSignUpIsCreated() throws Exception {
         // given
         final UserEntity mockUser = ControllerMockData.getAuthNewConsumerEntity();
-        final AuthInfoEntity mockAuthInfo = createAuthInfo(CONSUMER);
+        final AuthInfoEntity mockAuthInfo = createAuthInfo(CONSUMER, mockUser);
+
 
         given(authInfoRepository.findByLogin("vasya@email.com")).willReturn(Optional.empty());
         given(userRepository.save(mockUser)).willReturn(mockUser);
         given(authInfoRepository.save(mockAuthInfo)).willReturn(mockAuthInfo);
+
+        AuthInfoEntity entity = new AuthInfoEntity();
+        entity.setLogin("vasya@email.com");
+        entity.setPassword(passwordEncoder.encode("qwerty"));
 
         // when
         mockMvc.perform(post("/employee/sign-up")
@@ -41,9 +48,7 @@ public class AuthControllerTest extends AbstractControllerTest {
                         "  \"email\" : \"vasya@email.com\",\n" +
                         "  \"password\" : \"qwerty\",\n" +
                         "  \"fio\" : \"Пупкин Василий Иванович\",\n" +
-                        "  \"gender\" : \"MALE\", \n" +
-                        "  \"birthDate\" : \"19.01.1995\",\n" +
-                        "  \"info\" : \"Молодой инженер\" \n" +
+                        "  \"birthDate\" : \"19.01.1995\"\n" +
                         "}"))
         // then
                 .andExpect(status().isCreated())
@@ -51,11 +56,11 @@ public class AuthControllerTest extends AbstractControllerTest {
 
         verify(authInfoRepository, Mockito.times(1)).findByLogin("vasya@email.com");
         verify(userRepository, Mockito.times(1)).save(mockUser);
-//        verify(authInfoRepository, Mockito.times(1)).save(mockAuthInfo);
+        verify(authInfoRepository, Mockito.times(1)).save(mockAuthInfo);
     }
 
     @Test
-    public void testEmployeeSignUpWhenUserAlreadyExisted() throws Exception {
+    void testEmployeeSignUpWhenUserAlreadyExisted() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         signIn(EMPLOYEE);
@@ -76,7 +81,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testEmployeeSignInIsOk() throws Exception {
+    void testEmployeeSignInIsOk() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
 
@@ -100,7 +105,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testEmployeeSignInWithWrongPassword() throws Exception {
+    void testEmployeeSignInWithWrongPassword() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
 
@@ -120,7 +125,7 @@ public class AuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testEmployeeSignInWithWrongEmail() throws Exception {
+    void testEmployeeSignInWithWrongEmail() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
 
@@ -135,6 +140,7 @@ public class AuthControllerTest extends AbstractControllerTest {
                         "}"))
         // then
                 .andExpect(status().isForbidden());
+
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
     }
 }

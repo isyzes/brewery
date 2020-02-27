@@ -56,7 +56,7 @@ public class IngredientControllerTest extends AbstractControllerTest {
         mockMvc.perform(put("/ingredients/buy").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idIngredient\" : \"2\", \"milligramsInStock\" : 2551}"))
-                // then
+        // then
                 .andExpect(status().isBadRequest());
 
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");

@@ -86,4 +86,10 @@ public abstract class AbstractControllerTest {
         return authInfo;
     }
 
+    protected AuthInfoEntity createAuthInfo(Roles roles, UserEntity user) {
+        final AuthInfoEntity authInfo =createAuthInfo(roles);
+        authInfo.setUser(user);
+        return authInfo;
+    }
+
 }
