@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.security.Roles.CONSUMER;
+import static com.example.demo.security.Roles.EMPLOYEE;
+
 public class ControllerMockData {
     public final static long ID = 3;
 
@@ -98,7 +101,7 @@ public class ControllerMockData {
 
     public static UserEntity getNewEmployeeEntity(final long id) {
         final UserEntity employeeEntity = new UserEntity();
-        employeeEntity.setUserRole(Roles.EMPLOYEE);
+        employeeEntity.setUserRole(EMPLOYEE);
         employeeEntity.setId(id);
         return employeeEntity;
     }
@@ -110,7 +113,7 @@ public class ControllerMockData {
     public static UserEntity getNewEmployeeEntity() {
         final UserEntity employeeEntity = new UserEntity();
         employeeEntity.setId(ID);
-        employeeEntity.setUserRole(Roles.EMPLOYEE);
+        employeeEntity.setUserRole(EMPLOYEE);
         employeeEntity.setWorks(true);
 
         return employeeEntity;
@@ -125,7 +128,7 @@ public class ControllerMockData {
         firstEmployee.setWorks(true);
         firstEmployee.setDateStart(LocalDate.of(2018, 1,15));
         firstEmployee.setDateEnd(null);
-        firstEmployee.setUserRole(Roles.EMPLOYEE);
+        firstEmployee.setUserRole(EMPLOYEE);
 
         final UserEntity secondEmployee = new UserEntity();
         secondEmployee.setId(2L);
@@ -135,7 +138,7 @@ public class ControllerMockData {
         secondEmployee.setWorks(true);
         secondEmployee.setDateStart(LocalDate.of(2018, 1,15));
         secondEmployee.setDateEnd(null);
-        secondEmployee.setUserRole(Roles.EMPLOYEE);
+        secondEmployee.setUserRole(EMPLOYEE);
 
         final UserEntity thirdEmployee = new UserEntity();
         thirdEmployee.setId(4L);
@@ -145,7 +148,7 @@ public class ControllerMockData {
         thirdEmployee.setWorks(false);
         thirdEmployee.setDateStart(LocalDate.of(2018, 1,15));
         thirdEmployee.setDateEnd(LocalDate.of(2019,10,14));
-        thirdEmployee.setUserRole(Roles.EMPLOYEE);
+        thirdEmployee.setUserRole(EMPLOYEE);
 
         return List.of(firstEmployee, secondEmployee, thirdEmployee);
     }
@@ -164,7 +167,7 @@ public class ControllerMockData {
         final UserEntity userEntity = new UserEntity();
         userEntity.setId(4L);
         userEntity.setFio("Easy Pub");
-        userEntity.setUserRole(Roles.CONSUMER);
+        userEntity.setUserRole(CONSUMER);
         return userEntity;
     }
 
@@ -197,5 +200,40 @@ public class ControllerMockData {
         orderItemEntity.setBeer(getNewBeer(idBeer));
 
         return orderItemEntity;
+    }
+
+    public static UserEntity getNewEmployeeRequestdEntity() {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setFio("Ivanov Ivan Ivanovich");
+        userEntity.setDepartment("Production");
+        userEntity.setWages(2020);
+
+        return userEntity;
+    }
+
+    public static UserEntity getNewEmployeeResponseEntity() {
+        UserEntity userEntity = getNewEmployeeRequestdEntity();
+        userEntity.setId(0L);
+        userEntity.setUserRole(EMPLOYEE);
+        userEntity.setWorks(true);
+        userEntity.setDateStart(LocalDate.now());
+
+        return userEntity;
+    }
+
+    public static UserEntity getAuthNewEmployeeEntity() {
+        UserEntity userEntity = getAuthNewConsumerEntity();
+        userEntity.setUserRole(EMPLOYEE);
+        userEntity.setId(ID);
+        userEntity.setWorks(true);
+        return userEntity;
+    }
+
+    public static UserEntity getAuthNewEmployeeToDismiss() {
+        UserEntity userEntity = getNewEmployeeEntity();
+        userEntity.setWorks(false);
+        userEntity.setDateEnd(LocalDate.now());
+
+        return userEntity;
     }
 }

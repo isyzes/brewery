@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class AuthControllerTest extends AbstractControllerTest {
+class AuthControllerTest extends AbstractControllerTest {
 
     @Test
     void testEmployeeSignUpIsCreated() throws Exception {

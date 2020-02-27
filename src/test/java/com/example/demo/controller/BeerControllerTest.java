@@ -9,7 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import static com.example.demo.security.Roles.*;
+import static com.example.demo.security.Roles.CONSUMER;
+import static com.example.demo.security.Roles.MANAGER;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class BeerControllerTest extends AbstractControllerTest {
+class BeerControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetBeersIsOk() throws Exception {

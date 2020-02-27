@@ -4,7 +4,6 @@ import com.example.demo.dto.Employee;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,23 +12,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.demo.security.Roles.EMPLOYEE;
+
 @Service
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final EmployeeMapper employeeMapper;
 
-
     public Employee created(final Employee employee) {
         final UserEntity employeeEntity = employeeMapper.sourceToDestination(employee);
         employeeEntity.setWorks(true);
         employeeEntity.setDateStart(LocalDate.now());
+        employeeEntity.setUserRole(EMPLOYEE);
         userRepository.save(employeeEntity);
         return employee;
     }
 
     public List<Employee> getStaff() {
-        return userRepository.findAllByUserRole(Roles.EMPLOYEE).stream().map(
+        return userRepository.findAllByUserRole(EMPLOYEE).stream().map(
                 employeeEntity -> Employee.builder()
                         .id(employeeEntity.getId())
                         .fio(employeeEntity.getFio())
@@ -52,12 +53,4 @@ public class UserService {
             userRepository.save(employeeEntity);
         }
     }
-
-
-
-
-
-
-
-
 }

@@ -19,11 +19,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class IngredientControllerTest extends AbstractControllerTest {
+class IngredientControllerTest extends AbstractControllerTest {
 
 
     @Test
-    public void testBuyIngredientIsOk() throws Exception {
+    void testBuyIngredientIsOk() throws Exception {
         // given
         final IngredientEntity save = ControllerMockData.getNewIngredient(650402);
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
@@ -45,7 +45,7 @@ public class IngredientControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testBuyIngredientIsBadRequest() throws Exception {
+    void testBuyIngredientIsBadRequest() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(ingredientRepository.findById(2L)).willReturn(Optional.empty());

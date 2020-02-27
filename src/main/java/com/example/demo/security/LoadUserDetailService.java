@@ -34,5 +34,4 @@ public class LoadUserDetailService implements UserDetailsService {
     public void saveUser(final String username, final String password) {
         inMemoryUsers.put(username, passwordEncoder.encode(password));
     }
-
 }
