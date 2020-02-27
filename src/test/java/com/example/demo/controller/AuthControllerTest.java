@@ -3,8 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.AuthInfoEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.mockdata.ControllerMockData;
-
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
@@ -14,14 +12,15 @@ import org.springframework.security.core.userdetails.User;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.demo.security.Roles.EMPLOYEE;
 import static com.example.demo.security.Roles.CONSUMER;
+import static com.example.demo.security.Roles.EMPLOYEE;
 import static org.hamcrest.Matchers.hasLength;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class AuthControllerTest extends AbstractControllerTest {

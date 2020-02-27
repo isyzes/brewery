@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.authentication.UserSignUpRequest;
 import com.example.demo.dto.authentication.UserSignInRequest;
 import com.example.demo.dto.authentication.UserSignInResponse;
+import com.example.demo.dto.authentication.UserSignUpRequest;
 import com.example.demo.exception.SuchUserAlreadyExistException;
 import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;

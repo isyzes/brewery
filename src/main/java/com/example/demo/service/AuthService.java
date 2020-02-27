@@ -63,5 +63,4 @@ public class AuthService {
         authInfoEntity.setUser(savedUser);
         authInfoRepository.save(authInfoEntity);
     }
-
 }
