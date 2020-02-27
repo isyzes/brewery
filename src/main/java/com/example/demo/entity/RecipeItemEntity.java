@@ -18,7 +18,7 @@ public class RecipeItemEntity {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ingredient_id")
-    private IngredientEntity ingredientEntity;
+    private IngredientEntity ingredient;
     @Column(name = "milligram")
     private int milligram;
     @EqualsAndHashCode.Exclude

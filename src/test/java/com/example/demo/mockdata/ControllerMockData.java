@@ -55,7 +55,7 @@ public class ControllerMockData {
         final RecipeItemEntity partRecipeEntity = new RecipeItemEntity();
         partRecipeEntity.setId(ID);
         partRecipeEntity.setMilligram(5);
-        partRecipeEntity.setIngredientEntity(getNewIngredient(647851));
+        partRecipeEntity.setIngredient(getNewIngredient(647851));
         return partRecipeEntity;
     }
 
@@ -202,6 +202,15 @@ public class ControllerMockData {
         return orderItemEntity;
     }
 
+    public static OrderItemEntity getNewOrderItemEntity(long idBeer, int liters) {
+        OrderItemEntity orderItemEntity = new OrderItemEntity();
+        orderItemEntity.setOrder(getNewOrderEntity());
+        orderItemEntity.setLiters(liters);
+        orderItemEntity.setBeer(getNewBeer(idBeer));
+
+        return orderItemEntity;
+    }
+
     public static UserEntity getNewEmployeeRequestdEntity() {
         UserEntity userEntity = new UserEntity();
         userEntity.setFio("Ivanov Ivan Ivanovich");
@@ -235,5 +244,18 @@ public class ControllerMockData {
         userEntity.setDateEnd(LocalDate.now());
 
         return userEntity;
+    }
+
+    public static BeerEntity getResponseUpdatedBeer() {
+        final BeerEntity beerEntity = getNewBeer();
+        beerEntity.setName("Grimbergen");
+        beerEntity.setCostPrice(2551);
+        return beerEntity;
+    }
+
+    public static BeerEntity getSaveBeer() {
+        final BeerEntity beerEntity = getNewBeer();
+        beerEntity.setLitersInStock(beerEntity.getLitersInStock() + 2551);
+        return beerEntity;
     }
 }

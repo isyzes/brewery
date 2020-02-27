@@ -1,6 +1,6 @@
 package com.example.demo.dto.beer;
 
-import com.example.demo.dto.Recipe;
+import com.example.demo.dto.recipe.Recipe;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;

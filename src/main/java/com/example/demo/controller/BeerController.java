@@ -7,7 +7,7 @@ import com.example.demo.dto.beer.ResponseUpdatedLitersBeer;
 import com.example.demo.dto.order.ResponseOrder;
 import com.example.demo.exception.BreweryBeerException;
 import com.example.demo.exception.BreweryIngredientException;
-import com.example.demo.exception.UpdatedBeerException;
+import com.example.demo.exception.BreweryUpdatedBeerException;
 import com.example.demo.service.BeerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class BeerController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "updated/{idBeer}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Beer updatedBeer(@RequestBody final Beer newBeer, @PathVariable final long idBeer) throws UpdatedBeerException {
+    public Beer updatedBeer(@RequestBody final Beer newBeer, @PathVariable final long idBeer) throws BreweryUpdatedBeerException {
         return service.updatedBeer(newBeer, idBeer);
     }
 

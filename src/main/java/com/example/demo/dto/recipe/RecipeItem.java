@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.recipe;
 
 import com.example.demo.dto.ingredient.Ingredient;
 import lombok.Data;

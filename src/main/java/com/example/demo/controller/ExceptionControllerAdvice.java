@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.exception.BreweryIngredientException;
 import com.example.demo.exception.BreweryBeerException;
+import com.example.demo.exception.BreweryUpdatedBeerException;
 import com.example.demo.exception.SuchUserAlreadyExistException;
 import lombok.Data;
 import lombok.extern.java.Log;
@@ -18,7 +19,7 @@ import java.util.logging.Level;
 public class ExceptionControllerAdvice {
     @ExceptionHandler(
             {BreweryIngredientException.class, BreweryBeerException.class, SuchUserAlreadyExistException.class,
-                    UsernameNotFoundException.class})
+                    UsernameNotFoundException.class, BreweryUpdatedBeerException.class})
     private ResponseEntity<ErrorMessage> handleBadRequest(final Exception e) {
         log.log(Level.SEVERE, e.getMessage(), e);
         return new ResponseEntity<>(new ErrorMessage(e.getMessage()), HttpStatus.BAD_REQUEST);

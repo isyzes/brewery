@@ -1,25 +1,21 @@
 package com.example.demo.service;
 
-import com.example.demo.converter.PartRecipeConverter;
-import com.example.demo.dto.RecipeItem;
+import com.example.demo.dto.recipe.RecipeItem;
 import com.example.demo.dto.beer.Beer;
 import com.example.demo.dto.beer.OrderCreatedBeer;
 import com.example.demo.dto.beer.ResponseUpdatedLitersBeer;
 import com.example.demo.dto.order.OrderItem;
 import com.example.demo.dto.order.RequestOrder;
 import com.example.demo.dto.order.ResponseOrder;
-import com.example.demo.entity.BeerEntity;
-import com.example.demo.entity.OrderEntity;
-import com.example.demo.entity.OrderItemEntity;
+import com.example.demo.entity.*;
 import com.example.demo.exception.BreweryBeerException;
 import com.example.demo.exception.BreweryIngredientException;
-import com.example.demo.exception.UpdatedBeerException;
-import com.example.demo.mapper.BeerRequestMapper;
-import com.example.demo.mapper.RequestOrderMapper;
-import com.example.demo.mapper.ResponseOrderMapper;
+import com.example.demo.exception.BreweryUpdatedBeerException;
+import com.example.demo.mapper.*;
 import com.example.demo.repository.BeerRepository;
 import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.repository.RecipeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,29 +33,30 @@ public class BeerService {
 
     private final BeerRepository beerRepository;
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final RecipeRepository recipeRepository;
 
     private final IngredientService warehouseService;
     private final ManagerService managerService;
 
     private final BeerRequestMapper beerRequestMapper;
-
     private final RequestOrderMapper requestOrderMapper;
     private final ResponseOrderMapper responseOrderMapper;
+    private final RecipeItemMapper recipeItemMapper;
+    private final RecipeMapper recipeMapper;
 
-    private final OrderItemRepository orderItemRepository;
+    private final ListRecipeItemMapper listRecipeItemMapper;
 
     @Transactional
-    public Beer updatedBeer(final Beer newBeer, final long idBeer) throws UpdatedBeerException {
+    public Beer updatedBeer(final Beer newBeer, final long idBeer) throws BreweryUpdatedBeerException {
         final Optional<BeerEntity> optionalBeer = beerRepository.findById(idBeer);
 
         if (optionalBeer.isPresent()) {
             final BeerEntity beerEntity = optionalBeer.get();
             updatedBeer(beerEntity, newBeer);
 
-            beerRepository.save(beerEntity);
             return beerRequestMapper.destinationToSource(beerEntity);
-        } else throw new UpdatedBeerException("Beer with id=" + idBeer + " not found!");
-
+        } else throw new BreweryUpdatedBeerException("Beer with id=" + idBeer + " not found!");
     }
 
     public List<Beer> getBeers() {
@@ -85,7 +82,7 @@ public class BeerService {
 
         if (optionalBeer.isPresent()) {
             final BeerEntity beerEntity = optionalBeer.get();
-            final List<RecipeItem> recipe = PartRecipeConverter.destinationToSource(beerEntity.getRecipe().getItems());
+            final List<RecipeItem> recipe = listRecipeItemMapper.destinationToSource(beerEntity.getRecipe().getItems());
 
             final boolean thereIsIngredients = warehouseService.thereIsIngredients(recipe, orderCreatedBeer.getLiters());
 
@@ -127,11 +124,10 @@ public class BeerService {
            orderEntity.setItems(getOrderItemEntity(requestOrder.getItems(), orderEntity));
 
            sellBeer(requestOrder.getItems());
-//           orderRepository.save(orderEntity);
+           orderRepository.save(orderEntity);
            return responseOrderMapper.destinationToSource(orderEntity);
        } else {
            managerService.setNeedBeer(true);
-
            throw new BreweryBeerException("Not enough beer in stock!");
         }
     }
@@ -208,9 +204,10 @@ public class BeerService {
         if (newBeer.getCostPrice() > 0) beerEntity.setCostPrice(newBeer.getCostPrice());
 
         if (newBeer.getRecipe() != null) {
-
-            //TODO придумать что нибудь другое
-
+            RecipeEntity recipeEntity = recipeMapper.sourceToDestination(newBeer.getRecipe());
+            recipeRepository.save(recipeEntity);
+            beerEntity.setRecipe(recipeEntity);
         }
+        beerRepository.save(beerEntity);
     }
 }
