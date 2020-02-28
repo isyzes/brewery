@@ -21,9 +21,4 @@ public class RecipeItemEntity {
     private IngredientEntity ingredient;
     @Column(name = "milligram")
     private int milligram;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_id")
-    private RecipeEntity recipe;
 }

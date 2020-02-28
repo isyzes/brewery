@@ -24,6 +24,7 @@ public class OrderEntity {
     private UserEntity consumer;
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
     private List<OrderItemEntity> items;
 }

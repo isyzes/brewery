@@ -17,6 +17,7 @@ public class RecipeEntity {
     private long id;
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipe")
+    @JoinColumn(name = "recipe_id")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<RecipeItemEntity> items;
 }

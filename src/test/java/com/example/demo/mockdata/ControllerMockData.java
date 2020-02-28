@@ -114,7 +114,7 @@ public class ControllerMockData {
 
     public static OrderItemEntity getNewOrderItemEntity(long idBeer, int liters) {
         OrderItemEntity orderItemEntity = new OrderItemEntity();
-        orderItemEntity.setOrder(getNewOrderEntity());
+//        orderItemEntity.setOrder(getNewOrderEntity());
         orderItemEntity.setLiters(liters);
         orderItemEntity.setBeer(getNewBeer(idBeer));
 

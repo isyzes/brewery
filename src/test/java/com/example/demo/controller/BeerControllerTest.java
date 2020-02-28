@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 
 import java.util.ArrayList;
@@ -147,8 +146,8 @@ class BeerControllerTest extends AbstractControllerTest {
                             "{\"beer\":{\"id\":4, \"name\":\"Grimbergen\"},\"liters\":4}" +
                         "]}"));
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
-        verify(beerRepository, Mockito.times(4)).findById(3L);
-        verify(beerRepository, Mockito.times(4)).findById(4L);
+        verify(beerRepository, Mockito.times(1)).findById(3L);
+        verify(beerRepository, Mockito.times(1)).findById(4L);
         verify(orderItemRepository, Mockito.times(1)).save(firstSaveItem);
         verify(orderItemRepository, Mockito.times(1)).save(secondSaveItem);
         verify(orderRepository, Mockito.times(1)).save(save);
@@ -193,7 +192,7 @@ class BeerControllerTest extends AbstractControllerTest {
                 .andExpect(content().json("{\"idBeer\" : 3, \"nameBeer\" : \"Grimbergen\", \"totalLiters\" : 8776}}"));
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findById(ID);
-        verify(ingredientRepository, Mockito.times(2)).findById(ID);
+        verify(ingredientRepository, Mockito.times(1)).findById(ID);
         verify(beerRepository, Mockito.times(1)).save(save);
     }
 

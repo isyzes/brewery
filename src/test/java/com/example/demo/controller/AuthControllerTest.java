@@ -4,6 +4,7 @@ import com.example.demo.entity.AuthInfoEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.mockdata.ControllerMockData;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 import static com.example.demo.security.Roles.CONSUMER;
 import static com.example.demo.security.Roles.EMPLOYEE;
+import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasLength;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
@@ -50,7 +52,7 @@ class AuthControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("token", hasLength(144)));
         verify(authInfoRepository, Mockito.times(1)).findByLogin("vasya@email.com");
         verify(userRepository, Mockito.times(1)).save(mockUser);
-        verify(authInfoRepository, Mockito.times(1)).save(mockAuthInfo);
+        verify(authInfoRepository).save(ArgumentMatchers.any(AuthInfoEntity.class));
     }
 
     @Test

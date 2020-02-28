@@ -6,17 +6,12 @@ import com.example.demo.dto.order.ResponseOrder;
 import com.example.demo.entity.BeerEntity;
 import com.example.demo.entity.OrderEntity;
 import com.example.demo.entity.OrderItemEntity;
-import com.example.demo.exception.BreweryBeerException;
+import com.example.demo.mapper.OrderItemMapper;
 import com.example.demo.mapper.RequestOrderMapper;
 import com.example.demo.mapper.ResponseOrderMapper;
-import com.example.demo.repository.BeerRepository;
 import com.example.demo.repository.OrderItemRepository;
 import com.example.demo.repository.OrderRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,32 +19,31 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
     private final RequestOrderMapper requestOrderMapper;
     private final ResponseOrderMapper responseOrderMapper;
+    private final OrderItemMapper orderItemMapper;
 
-    private final BeerRepository beerRepository;
-
-
-    public ResponseOrder getOrder(final RequestOrder requestOrder) {
+    public ResponseOrder createOrder(final RequestOrder requestOrder, final List<BeerEntity> beerEntities) {
         final OrderEntity orderEntity = requestOrderMapper.sourceToDestination(requestOrder);
-        final double totalPrice = totalPrice(requestOrder.getItems());
+        final double totalPrice = getTotalPrice(requestOrder.getItems(), beerEntities);
         orderEntity.setPrice(totalPrice);
-        orderEntity.setItems(getOrderItemEntity(requestOrder.getItems(), orderEntity));
+        orderEntity.setItems(getOrderItemEntity(requestOrder.getItems(), beerEntities));
         orderRepository.save(orderEntity);
 
         return responseOrderMapper.destinationToSource(orderEntity);
     }
 
-    private double totalPrice(final List<OrderItem> products) {
+    private double getTotalPrice(final List<OrderItem> products, final List<BeerEntity> beerEntities) {
         int totalPrice = 0;
         for (OrderItem order: products) {
-            BeerEntity beerEntity = beerRepository.findById(order.getBeer().getId()).get();
+            final BeerEntity beerEntity = getBeer(order.getBeer().getId(), beerEntities);
+
             totalPrice =+ order.getLiters() * beerEntity.getCostPrice();
         }
 
@@ -57,18 +51,27 @@ public class OrderService {
         return bigDecimal.doubleValue();
     }
 
-    private List<OrderItemEntity> getOrderItemEntity(final List<OrderItem> orderItems, final OrderEntity orderEntity) {
-        List<OrderItemEntity> result = new ArrayList<>();
+    private List<OrderItemEntity> getOrderItemEntity(final List<OrderItem> orderItems, final List<BeerEntity> beerEntities) {
+        final List<OrderItemEntity> result = new ArrayList<>();
+
         for (OrderItem item: orderItems) {
-            OrderItemEntity orderItemEntity = new OrderItemEntity();
-            orderItemEntity.setLiters(item.getLiters());
-            orderItemEntity.setOrder(orderEntity);
-            BeerEntity beerEntity = beerRepository.findById(item.getBeer().getId()).get();
+            final OrderItemEntity orderItemEntity = orderItemMapper.sourceToDestination(item);
+            final BeerEntity beerEntity = getBeer(item.getBeer().getId(), beerEntities);
+
             orderItemEntity.setBeer(beerEntity);
             result.add(orderItemEntity);
-
             orderItemRepository.save(orderItemEntity);
         }
         return result;
     }
+
+    private BeerEntity getBeer(final long id, final List<BeerEntity> beerEntities) {
+        for (BeerEntity beer: beerEntities) {
+            if (beer.getId() == id) {
+                return beer;
+            }
+        }
+        return null;
+    }
 }
+

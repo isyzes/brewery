@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +42,9 @@ public class IngredientService {
         }
     }
 
-    boolean thereIsIngredients(final List<RecipeItem> recipe, final int liters) {
+    List<IngredientEntity> thereIsIngredients(final List<RecipeItem> recipe, final int liters) {
+        final List<IngredientEntity> result = new ArrayList<>();
+
         for (RecipeItem part: recipe) {
             final long id = part.getIngredient().getId();
 
@@ -49,23 +52,30 @@ public class IngredientService {
 
             if (ingredientEntity.isPresent()) {
                 final IngredientEntity ingredient = ingredientEntity.get();
+                result.add(ingredient);
 
                 if (ingredient.getMilligramsInStock() < (part.getMilligram() * liters))
-                    return false;
+                    return null;
 
-            } else return false;
+            } else return null;
         }
-        return true;
+        return result;
     }
 
-    void takeIngredientsForBeer(final List<RecipeItem> recipe) {
+    void takeIngredientsForBeer(final List<RecipeItem> recipe, final List<IngredientEntity> ingredientEntities) {
         for (RecipeItem part: recipe) {
             final long id = part.getIngredient().getId();
-            final Optional<IngredientEntity> optionalIngredientEntity = ingredientRepository.findById(id);
-            final IngredientEntity ingredientEntity = optionalIngredientEntity.get();
+            final IngredientEntity ingredientEntity = getIngredient(id, ingredientEntities);
             final int totalMilligramsInStock = ingredientEntity.getMilligramsInStock() - part.getMilligram();
             ingredientEntity.setMilligramsInStock(totalMilligramsInStock);
             ingredientRepository.save(ingredientEntity);
         }
+    }
+
+    private IngredientEntity getIngredient(final long id, final List<IngredientEntity> ingredientEntities) {
+        for (IngredientEntity ingredient: ingredientEntities) {
+            if (ingredient.getId() == id) return ingredient;
+        }
+        return null;
     }
 }

@@ -21,11 +21,6 @@ public class OrderItemEntity {
     private BeerEntity beer;
     @Column(name = "liters")
     private int liters;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    private OrderEntity order;
 }
 
 
