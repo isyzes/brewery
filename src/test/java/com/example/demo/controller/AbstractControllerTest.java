@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:application-test.properties")
 public abstract class AbstractControllerTest {
+    protected final static long ID = 3;
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
@@ -49,7 +50,6 @@ public abstract class AbstractControllerTest {
     protected UserRepository userRepository;
     @MockBean
     protected OrderItemRepository orderItemRepository;
-
     @SpyBean
     protected LoadUserDetailService loadUserDetailService;
 

@@ -1,11 +1,15 @@
 package com.example.demo.config;
 
+import lombok.extern.java.Log;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.logging.Level;
+
+@Log
 @Configuration
 public class TelegramBot extends TelegramLongPollingBot {
     private static final String TOKEN = "555912788:AAEXVo3-mUVidr_yRp-8nnrqxS4rgvzxiM8";
@@ -35,7 +39,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.log(Level.WARNING, e.getMessage(), e);
         }
     }
 }

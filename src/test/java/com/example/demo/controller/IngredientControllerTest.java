@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class IngredientControllerTest extends AbstractControllerTest {
 
-
     @Test
     void testBuyIngredientIsOk() throws Exception {
         // given
@@ -29,16 +28,14 @@ class IngredientControllerTest extends AbstractControllerTest {
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(ingredientRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalIngredient());
         given(ingredientRepository.save(save)).willReturn(save);
-
         final String token = signIn(MANAGER);
         // when
         mockMvc.perform(put("/ingredients/buy").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idIngredient\" : \"3\", \"milligramsInStock\" : 2551}"))
-        // then
+                // then
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"idIngredient\":3,\"totalMilligramsInStock\":650402}"));
-
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(ingredientRepository, Mockito.times(1)).findById(3L);
         verify(ingredientRepository, Mockito.times(1)).save(save);
@@ -49,16 +46,13 @@ class IngredientControllerTest extends AbstractControllerTest {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(ingredientRepository.findById(2L)).willReturn(Optional.empty());
-
-
         final String token = signIn(MANAGER);
         // when
         mockMvc.perform(put("/ingredients/buy").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idIngredient\" : \"2\", \"milligramsInStock\" : 2551}"))
-        // then
+                // then
                 .andExpect(status().isBadRequest());
-
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(ingredientRepository, Mockito.times(1)).findById(2L);
     }

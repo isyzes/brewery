@@ -21,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(value = "/beers/")
 public class BeerController {
+
     private final BeerService service;
 
     @ResponseStatus(HttpStatus.OK)

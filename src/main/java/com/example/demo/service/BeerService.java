@@ -1,28 +1,27 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.recipe.RecipeItem;
 import com.example.demo.dto.beer.Beer;
 import com.example.demo.dto.beer.OrderCreatedBeer;
 import com.example.demo.dto.beer.ResponseUpdatedLitersBeer;
 import com.example.demo.dto.order.OrderItem;
 import com.example.demo.dto.order.RequestOrder;
 import com.example.demo.dto.order.ResponseOrder;
-import com.example.demo.entity.*;
+import com.example.demo.dto.recipe.RecipeItem;
+import com.example.demo.entity.BeerEntity;
+import com.example.demo.entity.RecipeEntity;
 import com.example.demo.exception.BreweryBeerException;
 import com.example.demo.exception.BreweryIngredientException;
 import com.example.demo.exception.BreweryUpdatedBeerException;
-import com.example.demo.mapper.*;
+import com.example.demo.mapper.BeerRequestMapper;
+import com.example.demo.mapper.ListRecipeItemMapper;
+import com.example.demo.mapper.RecipeMapper;
 import com.example.demo.repository.BeerRepository;
-import com.example.demo.repository.OrderItemRepository;
-import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.RecipeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,21 +29,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class BeerService {
-
     private final BeerRepository beerRepository;
-    private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
     private final RecipeRepository recipeRepository;
 
     private final IngredientService warehouseService;
     private final ManagerService managerService;
+    private final OrderService orderService;
 
     private final BeerRequestMapper beerRequestMapper;
-    private final RequestOrderMapper requestOrderMapper;
-    private final ResponseOrderMapper responseOrderMapper;
-    private final RecipeItemMapper recipeItemMapper;
     private final RecipeMapper recipeMapper;
-
     private final ListRecipeItemMapper listRecipeItemMapper;
 
     @Transactional
@@ -113,43 +106,24 @@ public class BeerService {
 
     @Transactional
     public ResponseOrder sellBeer(final RequestOrder requestOrder) throws BreweryBeerException {
-
         final boolean thereIsBeer = thereIsBeer(requestOrder.getItems());
 
-       if (thereIsBeer) {
-           final OrderEntity orderEntity = requestOrderMapper.sourceToDestination(requestOrder);
-           final double totalPrice = totalPrice(requestOrder.getItems());
-
-           orderEntity.setPrice(totalPrice);
-           orderEntity.setItems(getOrderItemEntity(requestOrder.getItems(), orderEntity));
-
-           sellBeer(requestOrder.getItems());
-           orderRepository.save(orderEntity);
-           return responseOrderMapper.destinationToSource(orderEntity);
-       } else {
-           managerService.setNeedBeer(true);
-           throw new BreweryBeerException("Not enough beer in stock!");
+        if (thereIsBeer) {
+            sellBeer(requestOrder.getItems());
+            return orderService.getOrder(requestOrder);
+        } else {
+            managerService.setNeedBeer(true);
+            throw new BreweryBeerException("Not enough beer in stock!");
         }
     }
 
+    public BeerEntity gerBeer(long id) throws BreweryBeerException {
+        Optional<BeerEntity> optionalBeerEntity = beerRepository.findById(id);
 
+        if (optionalBeerEntity.isPresent())
+            return optionalBeerEntity.get();
 
-
-
-
-    private List<OrderItemEntity> getOrderItemEntity(List<OrderItem> orderItems, OrderEntity orderEntity) {
-        List<OrderItemEntity> result = new ArrayList<>();
-        for (OrderItem item: orderItems) {
-            OrderItemEntity orderItemEntity = new OrderItemEntity();
-            orderItemEntity.setLiters(item.getLiters());
-            orderItemEntity.setOrder(orderEntity);
-            BeerEntity beerEntity = beerRepository.findById(item.getBeer().getId()).get();
-            orderItemEntity.setBeer(beerEntity);
-            result.add(orderItemEntity);
-
-            orderItemRepository.save(orderItemEntity);
-        }
-        return result;
+        throw new BreweryBeerException("No beer in the knowledge base!");
     }
 
     private boolean thereIsBeer(final List<OrderItem> orders) {
@@ -166,7 +140,6 @@ public class BeerService {
 
             } else return false;
         }
-
         return true;
     }
 
@@ -179,17 +152,6 @@ public class BeerService {
             beerEntity.setLitersInStock(totalLitersInStock);
             beerRepository.save(beerEntity);
         }
-    }
-
-    private double totalPrice(final List<OrderItem> products) {
-        int totalPrice = 0;
-        for (OrderItem order: products) {
-            BeerEntity beerEntity = beerRepository.findById(order.getBeer().getId()).get();
-            totalPrice =+ order.getLiters() * beerEntity.getCostPrice();
-        }
-
-        BigDecimal bigDecimal = new BigDecimal(new BigInteger(String.valueOf(totalPrice)), 2);
-        return bigDecimal.doubleValue();
     }
 
     private void updatedBeer(final BeerEntity beerEntity, final Beer newBeer) {

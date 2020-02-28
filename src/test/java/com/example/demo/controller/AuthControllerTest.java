@@ -30,16 +30,12 @@ class AuthControllerTest extends AbstractControllerTest {
         // given
         final UserEntity mockUser = ControllerMockData.getAuthNewConsumerEntity();
         final AuthInfoEntity mockAuthInfo = createAuthInfo(CONSUMER, mockUser);
-
-
         given(authInfoRepository.findByLogin("vasya@email.com")).willReturn(Optional.empty());
         given(userRepository.save(mockUser)).willReturn(mockUser);
         given(authInfoRepository.save(mockAuthInfo)).willReturn(mockAuthInfo);
-
         AuthInfoEntity entity = new AuthInfoEntity();
         entity.setLogin("vasya@email.com");
         entity.setPassword(passwordEncoder.encode("qwerty"));
-
         // when
         mockMvc.perform(post("/employee/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -49,10 +45,9 @@ class AuthControllerTest extends AbstractControllerTest {
                         "  \"fio\" : \"Пупкин Василий Иванович\",\n" +
                         "  \"birthDate\" : \"19.01.1995\"\n" +
                         "}"))
-        // then
+                // then
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("token", hasLength(144)));
-
         verify(authInfoRepository, Mockito.times(1)).findByLogin("vasya@email.com");
         verify(userRepository, Mockito.times(1)).save(mockUser);
         verify(authInfoRepository, Mockito.times(1)).save(mockAuthInfo);
@@ -63,7 +58,6 @@ class AuthControllerTest extends AbstractControllerTest {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         signIn(EMPLOYEE);
-
         // when
         mockMvc.perform(post("/employee/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,9 +67,8 @@ class AuthControllerTest extends AbstractControllerTest {
                         "  \"fio\" : \"Пупкин Василий Иванович\",\n" +
                         "  \"birthDate\" : \"19.01.1995\",\n" +
                         "}"))
-         // then
+                // then
                 .andExpect(status().isBadRequest());
-
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
     }
 
@@ -83,12 +76,9 @@ class AuthControllerTest extends AbstractControllerTest {
     void testEmployeeSignInIsOk() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
-
         final User user = new User("vasya@email.com", passwordEncoder.encode("qwerty"),
                 List.of(new SimpleGrantedAuthority("ROLE_" + CONSUMER)));
-
         willReturn(user).given(loadUserDetailService).loadUserByUsername("vasya@email.com");
-
         // when
         mockMvc.perform(post("/employee/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -96,10 +86,9 @@ class AuthControllerTest extends AbstractControllerTest {
                         "  \"email\" : \"vasya@email.com\",\n" +
                         "  \"password\" : \"qwerty\"\n" +
                         "}"))
-        // then
+                // then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("token", hasLength(144)));
-
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
     }
 
@@ -107,9 +96,7 @@ class AuthControllerTest extends AbstractControllerTest {
     void testEmployeeSignInWithWrongPassword() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
-
         signIn(CONSUMER);
-
         // when
         mockMvc.perform(post("/employee/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -117,9 +104,8 @@ class AuthControllerTest extends AbstractControllerTest {
                         "  \"email\" : \"vasya@email.com\",\n" +
                         "  \"password\" : \"wrongPassword\"\n" +
                         "}"))
-        // then
+                // then
                 .andExpect(status().isForbidden());
-
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
     }
 
@@ -127,9 +113,7 @@ class AuthControllerTest extends AbstractControllerTest {
     void testEmployeeSignInWithWrongEmail() throws Exception {
         // given
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
-
         signIn(EMPLOYEE);
-
         // when
         mockMvc.perform(post("/employee/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,9 +121,8 @@ class AuthControllerTest extends AbstractControllerTest {
                         "  \"email\" : \"noSuchVasyavasya@email.com\",\n" +
                         "  \"password\" : \"wrongPassword\"\n" +
                         "}"))
-        // then
+                // then
                 .andExpect(status().isForbidden());
-
         verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
     }
 }

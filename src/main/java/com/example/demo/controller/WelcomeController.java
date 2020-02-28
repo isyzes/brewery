@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class TestController {
+public class WelcomeController {
+
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/test")
-    public String  test() {
-       return "Hello World";
+    @GetMapping(value = "/index")
+    public String  welcome() {
+       return "Welcome!";
     }
 }

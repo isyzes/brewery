@@ -10,7 +10,6 @@ import com.example.demo.mapper.EmployeeSignUpRequestMapper;
 import com.example.demo.repository.AuthInfoRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtUtil;
-import com.example.demo.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.demo.security.Roles.CONSUMER;
+
 @Service
 @AllArgsConstructor
 public class AuthService {
@@ -30,12 +31,12 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
-    private EmployeeSignUpRequestMapper employeeSignUpRequestMapper;
+    private final EmployeeSignUpRequestMapper employeeSignUpRequestMapper;
 
 
     public UserSignInResponse singIn(final UserSignInRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserEntity userEntity = userRepository.findAllByEmail(request.getEmail());
+        final UserEntity userEntity = userRepository.findAllByEmail(request.getEmail());
         return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), List.of(new SimpleGrantedAuthority(userEntity.getUserRole().name())))));
     }
 
@@ -51,7 +52,7 @@ public class AuthService {
 
     private void saveUser(final UserSignUpRequest request) {
         final UserEntity userEntity = employeeSignUpRequestMapper.sourceToDestination(request);
-        userEntity.setUserRole(Roles.CONSUMER);
+        userEntity.setUserRole(CONSUMER);
         final UserEntity savedUser = userRepository.save(userEntity);
         saveAuthInfo(request, savedUser);
     }

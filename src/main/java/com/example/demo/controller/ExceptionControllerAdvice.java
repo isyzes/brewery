@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.logging.Level;
 
-@ControllerAdvice
 @Log
+@ControllerAdvice
 public class ExceptionControllerAdvice {
+
     @ExceptionHandler(
             {BreweryIngredientException.class, BreweryBeerException.class, SuchUserAlreadyExistException.class,
                     UsernameNotFoundException.class, BreweryUpdatedBeerException.class})
@@ -24,6 +25,7 @@ public class ExceptionControllerAdvice {
         log.log(Level.SEVERE, e.getMessage(), e);
         return new ResponseEntity<>(new ErrorMessage(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
     @Data
     public static class ErrorMessage {
 

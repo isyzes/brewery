@@ -41,7 +41,7 @@ public class IngredientService {
         }
     }
 
-    public boolean thereIsIngredients (final List<RecipeItem> recipe, int liters) {
+    boolean thereIsIngredients(final List<RecipeItem> recipe, final int liters) {
         for (RecipeItem part: recipe) {
             final long id = part.getIngredient().getId();
 
@@ -58,12 +58,10 @@ public class IngredientService {
         return true;
     }
 
-    public void takeIngredientsForBeer(List<RecipeItem> recipe) {
+    void takeIngredientsForBeer(final List<RecipeItem> recipe) {
         for (RecipeItem part: recipe) {
             final long id = part.getIngredient().getId();
-            //TODO: remove database access in a loop
             final Optional<IngredientEntity> optionalIngredientEntity = ingredientRepository.findById(id);
-
             final IngredientEntity ingredientEntity = optionalIngredientEntity.get();
             final int totalMilligramsInStock = ingredientEntity.getMilligramsInStock() - part.getMilligram();
             ingredientEntity.setMilligramsInStock(totalMilligramsInStock);

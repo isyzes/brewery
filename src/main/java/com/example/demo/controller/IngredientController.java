@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(value = "/ingredients/")
 public class IngredientController {
+
     private final IngredientService service;
 
     @ResponseStatus(HttpStatus.OK)
