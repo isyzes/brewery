@@ -209,7 +209,7 @@ Project for the production and sale of beer
     }
 `Response: 400 BAD_REQUEST`
 
-### BWRP-11 как "Руководитель" я хочу добавлять новые виды пива для производства чтобы расширить ассортимент
+### BWRP-11(бывшая BWRP-9) как "Руководитель" я хочу добавлять новые виды пива для производства чтобы расширить ассортимент
 `Request post /beers/add`
 
     {"id":1,
@@ -224,7 +224,7 @@ Project for the production and sale of beer
 
     {"id" : 2}
 
-### BWRP-12 как "Руководитель" я хочу получать список всех заказов полученных в текущем месяце для определения часто покупаемого товара 
+### BWRP-12(бывшая BWRP-10) как "Руководитель" я хочу получать список всех заказов полученных в текущем месяце для определения часто покупаемого товара 
 `Request get /orders/list`
 
 `Response: 200 OK`
@@ -235,27 +235,27 @@ Project for the production and sale of beer
         {"id" : 3, "price" : "5483.15", "user_id" : 8, "item" : [{"id" : 4, "beer_id" : "124", "liters" : 2324, "order_id" : 3}]}       
     ]
 
-### BWRP-13 как "Руководитель" я хочу обновлять количесто готового пива на складе 
+### BWRP-13 как "Руководитель" я хочу обновлять количесто готового пива на складе когда оно заканчивается
 `Request get /orders/updated`
     
         {"idBeer" : 3, "liters" : 2551}
         
 `Response: 200 OK`
     
-    {"idBeer" : 3, "nameBeer" : "Grimbergen", "totalLiters" : 8776}}
+    {"idBeer" : 3, "nameBeer" : "Grimbergen", "totalLiters" : 2951}}
 
-### BWRP-14 как "Руководитель" я хочу получать уведомления о заканчивающейся ингредиентах чтобы вовремя закупить нужны ингредиенты
+### BWRP-14 как "Руководитель" я хочу получать уведомления о заканчивающейся ингредиентах чтобы вовремя заказать нужные ингредиенты
 `Request get /orders/updated`
 
     {"idBeer" : 3, "liters" : 2147483647}
 
 `Response: 200 BAD_REQUEST`
 
-### BWRP-15 как "Руководитель" я хочу заказывать ингредиенты если они закончились
-`Request put /ingredients//buy`
+### BWRP-15 как "Руководитель" я хочу заказывать ингредиенты чтобы они не заканчивались
+`Request put /ingredients/buy`
 
-    {"idIngredient" : "3", "milligramsInStoc6k" : 2551}
+    {"idIngredient" : "3", "milligramsInStock" : 2551}
 
 `Response: 200 OK` 
 
-    {"idIngredient":3,"totalMilligramsInStock":647851}
+    {"idIngredient":3,"totalMilligramsInStock":2597}
