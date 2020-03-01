@@ -96,7 +96,7 @@ public class BeerService {
                 return response;
             }
             else {
-                managerService.setNeedIngredient(true);
+                managerService.needIngredient();
 
                 throw new BreweryIngredientException("No ingredients in stock!");
             }
@@ -106,14 +106,14 @@ public class BeerService {
     }
 
     @Transactional
-    public ResponseOrder sellBeer(final RequestOrder requestOrder) throws BreweryBeerException {
+    public ResponseOrder createOrder(final RequestOrder requestOrder) throws BreweryBeerException {
         final List<BeerEntity> thereIsBeer = thereIsBeer(requestOrder.getItems());
 
         if (thereIsBeer != null) {
             updatedLitersInStock(requestOrder.getItems(), thereIsBeer);
             return orderService.createOrder(requestOrder, thereIsBeer);
         } else {
-            managerService.setNeedBeer(true);
+            managerService.needBeer();
             throw new BreweryBeerException("Not enough beer in stock!");
         }
     }

@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import static com.example.demo.security.Roles.CONSUMER;
 import static com.example.demo.security.Roles.EMPLOYEE;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasLength;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
@@ -39,7 +38,7 @@ class AuthControllerTest extends AbstractControllerTest {
         entity.setLogin("vasya@email.com");
         entity.setPassword(passwordEncoder.encode("qwerty"));
         // when
-        mockMvc.perform(post("/employee/sign-up")
+        mockMvc.perform(post("/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"email\" : \"vasya@email.com\",\n" +
@@ -61,7 +60,7 @@ class AuthControllerTest extends AbstractControllerTest {
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         signIn(EMPLOYEE);
         // when
-        mockMvc.perform(post("/employee/sign-up")
+        mockMvc.perform(post("/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"email\" : \"vasya@email.com\",\n" +
@@ -82,7 +81,7 @@ class AuthControllerTest extends AbstractControllerTest {
                 List.of(new SimpleGrantedAuthority("ROLE_" + CONSUMER)));
         willReturn(user).given(loadUserDetailService).loadUserByUsername("vasya@email.com");
         // when
-        mockMvc.perform(post("/employee/sign-in")
+        mockMvc.perform(post("/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"email\" : \"vasya@email.com\",\n" +
@@ -100,7 +99,7 @@ class AuthControllerTest extends AbstractControllerTest {
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         signIn(CONSUMER);
         // when
-        mockMvc.perform(post("/employee/sign-in")
+        mockMvc.perform(post("/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"email\" : \"vasya@email.com\",\n" +
@@ -117,7 +116,7 @@ class AuthControllerTest extends AbstractControllerTest {
         given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         signIn(EMPLOYEE);
         // when
-        mockMvc.perform(post("/employee/sign-in")
+        mockMvc.perform(post("/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"email\" : \"noSuchVasyavasya@email.com\",\n" +

@@ -1,8 +1,6 @@
 package com.example.demo.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -14,8 +12,6 @@ public class RecipeItemEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ingredient_id")
     private IngredientEntity ingredient;

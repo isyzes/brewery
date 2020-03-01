@@ -43,8 +43,8 @@ public class BeerController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "sell", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseOrder sellBeer(@RequestBody final RequestOrder requestOrder) throws BreweryBeerException {
-        return service.sellBeer(requestOrder);
+    @PostMapping(value = "buy", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseOrder createOrder(@RequestBody final RequestOrder requestOrder) throws BreweryBeerException {
+        return service.createOrder(requestOrder);
     }
 }

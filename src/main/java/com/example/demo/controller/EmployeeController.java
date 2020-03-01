@@ -18,9 +18,9 @@ public class EmployeeController {
     private final UserService service;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "employee/created", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Employee created(@RequestBody final Employee employee) {
-        return service.created(employee);
+    @PostMapping(value = "employee/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Employee create(@RequestBody final Employee employee) {
+        return service.create(employee);
     }
 
     @ResponseStatus(HttpStatus.OK)

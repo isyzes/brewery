@@ -60,7 +60,7 @@ public abstract class AbstractControllerTest {
 
         willReturn(user).given(loadUserDetailService).loadUserByUsername("vasya@email.com");
 
-        final String response = mockMvc.perform(post("/employee/sign-in")
+        final String response = mockMvc.perform(post("/sign-in")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"email\" : \"vasya@email.com\",\n" +

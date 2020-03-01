@@ -19,13 +19,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping(value = "/employee/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserSignInResponse singUp(@RequestBody final UserSignUpRequest request) throws SuchUserAlreadyExistException {
         return authService.signUp(request);
     }
 
-    @PostMapping(value = "/employee/sign-in", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/sign-in", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserSignInResponse singIn(@RequestBody final UserSignInRequest request) {
         return authService.singIn(request);
     }

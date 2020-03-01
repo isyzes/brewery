@@ -102,21 +102,20 @@ public class ControllerMockData {
         return List.of(firstEmployee, secondEmployee, thirdEmployee);
     }
 
-    public static OrderEntity getNewOrderEntity() {
+    public static OrderEntity getSaveOrderEntity(final OrderItemEntity firstSaveItem, final OrderItemEntity secondSaveItem) {
         final OrderEntity orderEntity = new OrderEntity();
 
         orderEntity.setPrice(26.28);
-        orderEntity.setItems(getNewListOrderItemEntity());
+        orderEntity.setItems(List.of(firstSaveItem, secondSaveItem));
         orderEntity.setConsumer(getNewConsumerEntity());
 
         return orderEntity;
     }
 
-    public static OrderItemEntity getNewOrderItemEntity(long idBeer, int liters) {
+    public static OrderItemEntity getNewOrderItemEntity(final BeerEntity beerEntity, final int liters) {
         OrderItemEntity orderItemEntity = new OrderItemEntity();
-//        orderItemEntity.setOrder(getNewOrderEntity());
         orderItemEntity.setLiters(liters);
-        orderItemEntity.setBeer(getNewBeer(idBeer));
+        orderItemEntity.setBeer(beerEntity);
 
         return orderItemEntity;
     }
@@ -178,12 +177,17 @@ public class ControllerMockData {
         return beerEntity;
     }
 
+    public static BeerEntity getSaveBeer(final long id, final int litersInStock) {
+        final BeerEntity beerEntity = getNewBeer();
+        beerEntity.setId(id);
+        beerEntity.setLitersInStock(litersInStock);
+        return beerEntity;
+    }
 
     private static UserEntity getNewConsumerEntity() {
         final UserEntity userEntity = new UserEntity();
         userEntity.setId(4L);
         userEntity.setFio("Easy Pub");
-        userEntity.setUserRole(CONSUMER);
         return userEntity;
     }
 
@@ -216,6 +220,13 @@ public class ControllerMockData {
         return beerEntity;
     }
 
+    private static BeerEntity getNewBeer(final long id, final int litersInStock) {
+        final BeerEntity beerEntity = getNewBeer();
+        beerEntity.setId(id);
+        beerEntity.setLitersInStock(litersInStock);
+        return beerEntity;
+    }
+
     private static RecipeEntity getRecipeEntity() {
         RecipeEntity recipeEntity = new RecipeEntity();
         recipeEntity.setId(ID);
@@ -229,18 +240,4 @@ public class ControllerMockData {
         partRecipeEntity.setMilligram(5);
         partRecipeEntity.setIngredient(getNewIngredient(647851));
         return partRecipeEntity;
-    }
-
-    private static List<OrderItemEntity> getNewListOrderItemEntity() {
-        final OrderItemEntity firstOrderItemEntity = new OrderItemEntity();
-        firstOrderItemEntity.setBeer(getNewBeer(3));
-        firstOrderItemEntity.setLiters(5);
-
-        final OrderItemEntity secondOrderItemEntity = new OrderItemEntity();
-        secondOrderItemEntity.setBeer(getNewBeer(4));
-        secondOrderItemEntity.setLiters(4);
-
-        return List.of(firstOrderItemEntity, secondOrderItemEntity);
-
-    }
-}
+    }}

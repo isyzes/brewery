@@ -1,8 +1,6 @@
 package com.example.demo.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -18,8 +16,6 @@ public class AuthInfoEntity {
     private String login;
     @Column(name = "password")
     private String password;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;

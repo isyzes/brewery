@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 public class ManagerService {
     private final TelegramBot bot;
 
-    void setNeedBeer(boolean needBeer) {
-        bot.sendMessage("needBeer");
+    void needBeer() {
+        bot.sendMessage("Need Beer");
     }
 
-    void setNeedIngredient(boolean needIngredient) {
-        bot.sendMessage("needIngredient");
+    void needIngredient() {
+        bot.sendMessage("Need Ingredient");
     }
 }

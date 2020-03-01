@@ -20,7 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final EmployeeMapper employeeMapper;
 
-    public Employee created(final Employee employee) {
+    public Employee create(final Employee employee) {
         final UserEntity employeeEntity = employeeMapper.sourceToDestination(employee);
         employeeEntity.setWorks(true);
         employeeEntity.setDateStart(LocalDate.now());

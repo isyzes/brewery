@@ -30,7 +30,7 @@ class EmployeeControllerTest extends AbstractControllerTest {
         given(userRepository.save(request)).willReturn(response);
         final String token = signIn(MANAGER);
         // when
-        mockMvc.perform(post("/staff/employee/created").header("Authorization", token)
+        mockMvc.perform(post("/staff/employee/create").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"fio\" : \"Ivanov Ivan Ivanovich\", \"department\" : \"Production\", \"wages\" : 2020}"))
                 // then
