@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @AllArgsConstructor
@@ -42,27 +43,23 @@ public class IngredientService {
         }
     }
 
-    List<IngredientEntity> thereIsIngredients(final List<RecipeItem> recipe, final int liters) {
+    public List<IngredientEntity> ingredientsOfRecipe(final List<RecipeItem> recipe, final int liters) {
         final List<IngredientEntity> result = new ArrayList<>();
 
-        for (RecipeItem part: recipe) {
-            final long id = part.getIngredient().getId();
+        final AtomicInteger sum = new AtomicInteger();
 
-            final Optional<IngredientEntity> ingredientEntity = ingredientRepository.findById(id);
+        recipe.stream()
+                .peek(part ->sum.set(part.getMilligram() * liters))
+                .map(part -> ingredientRepository.findById(part.getIngredient().getId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(ingredient -> !(ingredient.getMilligramsInStock() < (sum.get())))
+                .forEach(result::add);
 
-            if (ingredientEntity.isPresent()) {
-                final IngredientEntity ingredient = ingredientEntity.get();
-                result.add(ingredient);
-
-                if (ingredient.getMilligramsInStock() < (part.getMilligram() * liters))
-                    return null;
-
-            } else return null;
-        }
         return result;
     }
 
-    void takeIngredientsForBeer(final List<RecipeItem> recipe, final List<IngredientEntity> ingredientEntities) {
+    public void takeIngredientsForBeer(final List<RecipeItem> recipe, final List<IngredientEntity> ingredientEntities) {
         for (RecipeItem part: recipe) {
             final long id = part.getIngredient().getId();
             final IngredientEntity ingredientEntity = getIngredient(id, ingredientEntities);
