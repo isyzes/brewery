@@ -7,11 +7,11 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "OrderEntity")
+@Table(name = "order_entity")
 public class OrderEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "price")
     private double price;

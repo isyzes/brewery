@@ -8,11 +8,11 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "Beer")
+@Table(name = "beer")
 public class BeerEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name")
     private String name;

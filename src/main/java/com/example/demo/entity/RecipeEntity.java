@@ -7,11 +7,11 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Recipe")
+@Table(name = "recipe")
 public class RecipeEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @JoinColumn(name = "recipe_id")
     @OneToMany(fetch = FetchType.LAZY)
