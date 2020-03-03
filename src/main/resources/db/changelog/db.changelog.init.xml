@@ -95,6 +95,7 @@
             </column>
             <column name="price" type="DECIMAL"/>
             <column name="user_id" type="BIGINT"/>
+            <column name="created" type="datetime" />
         </createTable>
     </changeSet>
 

@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.order.AdminOrderItem;
+import com.example.demo.dto.order.AdminResponseOrder;
 import com.example.demo.dto.order.OrderItem;
 import com.example.demo.dto.order.RequestOrder;
 import com.example.demo.dto.order.ResponseOrder;
@@ -16,8 +18,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -37,6 +42,18 @@ public class OrderService {
         orderRepository.save(orderEntity);
 
         return responseOrderMapper.destinationToSource(orderEntity);
+    }
+    
+    public List<AdminResponseOrder> getLastMonthOrders() {
+        final LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
+        final LocalDateTime lastMonthLocalDateTime = now.minusDays(now.getDayOfMonth() - 1).minusMonths(1);
+    
+        List<OrderEntity> aa = orderRepository.findAllByCreatedAfter(lastMonthLocalDateTime);
+        return aa.stream()
+                .map(this::createAdminResponseOrder)
+                .collect(Collectors.toList());
+        
+        
     }
 
     private double getTotalPrice(final List<OrderItem> products, final List<BeerEntity> beerEntities) {
@@ -72,6 +89,31 @@ public class OrderService {
             }
         }
         return null;
+    }
+	
+	private AdminResponseOrder createAdminResponseOrder(final OrderEntity order) {
+        final AdminResponseOrder adminResponseOrder = new AdminResponseOrder();
+        
+        final long order_id = order.getId();
+        adminResponseOrder.setId(order_id);
+        adminResponseOrder.setPrice(order.getPrice());
+        adminResponseOrder.setUser_id(order.getConsumer().getId());
+        adminResponseOrder.setItem(order.getItems().stream()
+                .map(orderItemEntity -> createAdminOrderItem(orderItemEntity, order_id))
+                .collect(Collectors.toList()));
+        
+        return adminResponseOrder;
+    }
+    
+    private AdminOrderItem createAdminOrderItem(final OrderItemEntity orderItem, final long order_id) {
+        final AdminOrderItem adminOrderItem = new AdminOrderItem();
+        
+        adminOrderItem.setId(orderItem.getId());
+        adminOrderItem.setBeer_id(orderItem.getBeer().getId());
+        adminOrderItem.setLiters(orderItem.getLiters());
+        adminOrderItem.setOrder_id(order_id);
+        
+        return adminOrderItem;
     }
 }
 
