@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.security.Roles;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -24,8 +23,6 @@ public class UserEntity {
     private LocalDate birthDate;
     @Column(name = "self_description")
     private String selfDescription;
-    @Column(name = "user_role")
-    private Roles userRole;
     @Column(name = "department")
     private String department;
     @Column(name = "wages")

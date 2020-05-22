@@ -24,7 +24,6 @@ public class UserService {
         final UserEntity employeeEntity = employeeMapper.sourceToDestination(employee);
         employeeEntity.setWorks(true);
         employeeEntity.setDateStart(LocalDate.now());
-        employeeEntity.setUserRole(EMPLOYEE);
         userRepository.save(employeeEntity);
         return employee;
     }

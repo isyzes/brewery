@@ -17,7 +17,6 @@
             <column name="fio" type="VARCHAR(128)"/>
             <column name="birth_date" type="DATE"/>
             <column name="self_description" type="VARCHAR(255)"/>
-            <column name="user_role" type="integer" />
             <column name="department" type="VARCHAR(64)" />
             <column name="wages" type="DECIMAL" />
             <column name="is_works" type="BOOL" />
@@ -40,6 +39,15 @@
     </changeSet>
 
     <changeSet id="3" author="Dima">
+        <createTable tableName="user_role">
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_role_item_auth_info" references="auth_info(id)" />
+            </column>
+            <column name="roles" type="VARCHAR(64)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="Dima">
         <createTable tableName="ingredient">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -49,7 +57,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="4" author="Dima">
+    <changeSet id="5" author="Dima">
         <createTable tableName="recipe_item">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -62,7 +70,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="5" author="Dima">
+    <changeSet id="6" author="Dima">
         <createTable tableName="recipe">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -70,7 +78,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="6" author="Dima">
+    <changeSet id="7" author="Dima">
         <createTable tableName="beer">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -88,7 +96,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="7" author="Dima">
+    <changeSet id="8" author="Dima">
         <createTable tableName="order_entity">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -98,7 +106,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="8" author="Dima">
+    <changeSet id="9" author="Dima">
         <createTable tableName="order_item">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

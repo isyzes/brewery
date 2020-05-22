@@ -26,7 +26,6 @@ class EmployeeControllerTest extends AbstractControllerTest {
         // given
         final UserEntity request = ControllerMockData.getNewEmployeeRequestEntity();
         final UserEntity response = ControllerMockData.getNewEmployeeResponseEntity();
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(userRepository.save(request)).willReturn(response);
         final String token = signIn(MANAGER);
         // when
@@ -38,7 +37,6 @@ class EmployeeControllerTest extends AbstractControllerTest {
                 .andExpect(content().json("{\n" +
                         "  \"id\" : 0\n" +
                         "}"));
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(userRepository, Mockito.times(1)).save(response);
     }
 
@@ -46,7 +44,6 @@ class EmployeeControllerTest extends AbstractControllerTest {
     void testEmployeeToDismissIsOk() throws Exception {
         // given
         final UserEntity save = ControllerMockData.getAuthNewEmployeeToDismiss();
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewEmployeeEntity());
         given(userRepository.findById(ID)).willReturn(ControllerMockData.getOptionalEmployeeEntity());
         given(userRepository.save(save)).willReturn(save);
         final String token = signIn(MANAGER);
@@ -55,7 +52,6 @@ class EmployeeControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 // then
                 .andExpect(status().isOk());
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(userRepository, Mockito.times(1)).findById(ID);
         verify(userRepository, Mockito.times(1)).save(save);
     }
@@ -63,7 +59,6 @@ class EmployeeControllerTest extends AbstractControllerTest {
     @Test
     void testGetStaffListIsOk() throws Exception {
         // given
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewEmployeeEntity());
         final String token = signIn(MANAGER);
         given(userRepository.findAllByUserRole(EMPLOYEE)).willReturn(ControllerMockData.getEmployeeEntities());
         // when
@@ -98,7 +93,6 @@ class EmployeeControllerTest extends AbstractControllerTest {
                             "\"dateEnd\":\"14.10.2019\"," +
                             "\"works\":false" +
                         "}]"));
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(userRepository, Mockito.times(1)).findAllByUserRole(EMPLOYEE);
     }
 }

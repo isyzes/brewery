@@ -1,37 +1,29 @@
 package com.example.demo.security;
 
+import com.example.demo.entity.AuthInfoEntity;
+import com.example.demo.repository.AuthInfoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 public class LoadUserDetailService implements UserDetailsService {
-
-    private final PasswordEncoder passwordEncoder;
-
-    private final Map<String, String> inMemoryUsers = new HashMap<>();
+    private final AuthInfoRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final String password = inMemoryUsers.get(username);
-        if (password == null) {
-            throw new UsernameNotFoundException("User with email: " + username + " not found");
-        } else {
-            return new User(username, password, Collections.emptyList());
-        }
-    }
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+        final Optional<AuthInfoEntity> optional = repository.findByLogin(email);
 
-    public void saveUser(final String username, final String password) {
-        inMemoryUsers.put(username, passwordEncoder.encode(password));
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+
+        throw new UsernameNotFoundException("User with email: " + email + " not found");
     }
 }

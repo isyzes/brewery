@@ -13,13 +13,13 @@ import com.example.demo.security.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
 
 import static com.example.demo.security.Roles.CONSUMER;
 
@@ -33,11 +33,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmployeeSignUpRequestMapper employeeSignUpRequestMapper;
 
-
-    public UserSignInResponse singIn(final UserSignInRequest request) {
+    @Transactional
+    public UserSignInResponse signIn(final UserSignInRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        final UserEntity userEntity = userRepository.findAllByEmail(request.getEmail());
-        return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), List.of(new SimpleGrantedAuthority(userEntity.getUserRole().name())))));
+
+        final Optional<AuthInfoEntity> optional = authInfoRepository.findByLogin(request.getEmail());
+        final AuthInfoEntity userEntity = optional.orElse(null);
+
+        assert userEntity != null;
+        return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), userEntity.getRoles())));
     }
 
     @Transactional
@@ -47,12 +51,11 @@ public class AuthService {
         }
         saveUser(request);
 
-        return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), List.of(new SimpleGrantedAuthority("EMPLOYEE")))));
+        return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), Collections.singleton(CONSUMER))));
     }
 
     private void saveUser(final UserSignUpRequest request) {
         final UserEntity userEntity = employeeSignUpRequestMapper.sourceToDestination(request);
-        userEntity.setUserRole(CONSUMER);
         final UserEntity savedUser = userRepository.save(userEntity);
         saveAuthInfo(request, savedUser);
     }
@@ -62,6 +65,7 @@ public class AuthService {
         authInfoEntity.setLogin(request.getEmail());
         authInfoEntity.setPassword(passwordEncoder.encode(request.getPassword()));
         authInfoEntity.setUser(savedUser);
+        authInfoEntity.setRoles(Collections.singleton(CONSUMER));
         authInfoRepository.save(authInfoEntity);
     }
 }

@@ -21,12 +21,12 @@ public class AuthController {
 
     @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserSignInResponse singUp(@RequestBody final UserSignUpRequest request) throws SuchUserAlreadyExistException {
+    public UserSignInResponse signUp(@RequestBody final UserSignUpRequest request) throws SuchUserAlreadyExistException {
         return authService.signUp(request);
     }
 
     @PostMapping(value = "/sign-in", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UserSignInResponse singIn(@RequestBody final UserSignInRequest request) {
-        return authService.singIn(request);
+    public UserSignInResponse signIn(@RequestBody final UserSignInRequest request) {
+        return authService.signIn(request);
     }
 }

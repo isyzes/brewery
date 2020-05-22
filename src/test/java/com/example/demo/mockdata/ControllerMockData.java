@@ -6,9 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.demo.security.Roles.CONSUMER;
-import static com.example.demo.security.Roles.EMPLOYEE;
-
 public class ControllerMockData {
     private final static long ID = 3;
 
@@ -77,7 +74,6 @@ public class ControllerMockData {
         firstEmployee.setWorks(true);
         firstEmployee.setDateStart(LocalDate.of(2018, 1,15));
         firstEmployee.setDateEnd(null);
-        firstEmployee.setUserRole(EMPLOYEE);
 
         final UserEntity secondEmployee = new UserEntity();
         secondEmployee.setId(2L);
@@ -87,7 +83,6 @@ public class ControllerMockData {
         secondEmployee.setWorks(true);
         secondEmployee.setDateStart(LocalDate.of(2018, 1,15));
         secondEmployee.setDateEnd(null);
-        secondEmployee.setUserRole(EMPLOYEE);
 
         final UserEntity thirdEmployee = new UserEntity();
         thirdEmployee.setId(4L);
@@ -97,7 +92,6 @@ public class ControllerMockData {
         thirdEmployee.setWorks(false);
         thirdEmployee.setDateStart(LocalDate.of(2018, 1,15));
         thirdEmployee.setDateEnd(LocalDate.of(2019,10,14));
-        thirdEmployee.setUserRole(EMPLOYEE);
 
         return List.of(firstEmployee, secondEmployee, thirdEmployee);
     }
@@ -125,7 +119,6 @@ public class ControllerMockData {
         userEntity.setEmail("vasya@email.com");
         userEntity.setBirthDate(LocalDate.of(1995, 1, 19));
         userEntity.setFio("Пупкин Василий Иванович");
-        userEntity.setUserRole(CONSUMER);
         return userEntity;
     }
 
@@ -141,7 +134,6 @@ public class ControllerMockData {
     public static UserEntity getNewEmployeeResponseEntity() {
         UserEntity userEntity = getNewEmployeeRequestEntity();
         userEntity.setId(0L);
-        userEntity.setUserRole(EMPLOYEE);
         userEntity.setWorks(true);
         userEntity.setDateStart(LocalDate.now());
 
@@ -150,7 +142,6 @@ public class ControllerMockData {
 
     public static UserEntity getAuthNewEmployeeEntity() {
         UserEntity userEntity = getAuthNewConsumerEntity();
-        userEntity.setUserRole(EMPLOYEE);
         userEntity.setId(ID);
         userEntity.setWorks(true);
         return userEntity;
@@ -194,7 +185,7 @@ public class ControllerMockData {
     private static UserEntity getNewEmployeeEntity() {
         final UserEntity employeeEntity = new UserEntity();
         employeeEntity.setId(ID);
-        employeeEntity.setUserRole(EMPLOYEE);
+        employeeEntity.setId(ID);
         employeeEntity.setWorks(true);
 
         return employeeEntity;

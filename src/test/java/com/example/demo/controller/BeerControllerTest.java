@@ -28,7 +28,6 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testGetBeersIsOk() throws Exception {
         // given
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findAll()).willReturn(ControllerMockData.getBeerEntityList());
         // when
         final String token = signIn(CONSUMER);
@@ -68,14 +67,12 @@ class BeerControllerTest extends AbstractControllerTest {
                         "\"recipe\":null" +
                         "}]"));
         verify(beerRepository, Mockito.times(1)).findAll();
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
     }
 
     @Test
     void testUpdatedBeerIsOk() throws Exception {
         // given
         final BeerEntity save = ControllerMockData.getResponseUpdatedBeer();
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalBeer());
         given(beerRepository.save(save)).willReturn(save);
         final String token = signIn(MANAGER);
@@ -93,7 +90,6 @@ class BeerControllerTest extends AbstractControllerTest {
                         "\"dateManufacture\": \"12.12.2020\", " +
                         "\"shelfLife\": 25, " +
                         "\"costPrice\": 2551}"));
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findById(ID);
         verify(beerRepository, Mockito.times(1)).save(save);
     }
@@ -101,7 +97,6 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testUpdatedBeerIs() throws Exception {
         // given
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findById(ID)).willReturn(Optional.empty());
         final String token = signIn(MANAGER);
         // when
@@ -110,7 +105,6 @@ class BeerControllerTest extends AbstractControllerTest {
                 .content("{\"name\" : \"Grimbergen\", \"costPrice\" : 2551}"))
                 // then
                 .andExpect(status().isBadRequest());
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findById(ID);
     }
 
@@ -122,7 +116,6 @@ class BeerControllerTest extends AbstractControllerTest {
         final OrderItemEntity firstSaveItem = ControllerMockData.getNewOrderItemEntity(firstSaveBeer, 5);
         final OrderItemEntity secondSaveItem = ControllerMockData.getNewOrderItemEntity(secondSaveBeer, 4);
         final OrderEntity save = ControllerMockData.getSaveOrderEntity(firstSaveItem, secondSaveItem);
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalBeer(3));
         given(beerRepository.findById(4L)).willReturn(ControllerMockData.getNewOptionalBeer(4));
         given(beerRepository.save(firstSaveBeer)).willReturn(firstSaveBeer);
@@ -148,7 +141,6 @@ class BeerControllerTest extends AbstractControllerTest {
                             "{\"beer\":{\"id\":3, \"name\":\"Grimbergen\"},\"liters\":5}," +
                             "{\"beer\":{\"id\":4, \"name\":\"Grimbergen\"},\"liters\":4}" +
                         "]}"));
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findById(3L);
         verify(beerRepository, Mockito.times(1)).findById(4L);
         verify(beerRepository, Mockito.times(1)).save(firstSaveBeer);
@@ -161,7 +153,6 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testBuyBeerIsBadRequest() throws Exception {
         // given
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalBeer(3L));
         given(beerRepository.findById(4L)).willReturn(ControllerMockData.getNewOptionalBeer(4L));
         final String token = signIn(CONSUMER);
@@ -175,7 +166,6 @@ class BeerControllerTest extends AbstractControllerTest {
                         "]}"))
                 // then
                 .andExpect(status().isBadRequest());
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findById(3L);
     }
 
@@ -183,7 +173,6 @@ class BeerControllerTest extends AbstractControllerTest {
     void testUpdatedLitersBeerInStockIsOk() throws Exception {
         // given
         final BeerEntity save = ControllerMockData.getSaveBeer();
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalBeer());
         given(ingredientRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalIngredient());
         given(beerRepository.save(save)).willReturn(save);
@@ -195,7 +184,6 @@ class BeerControllerTest extends AbstractControllerTest {
                 // then
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"idBeer\" : 3, \"nameBeer\" : \"Grimbergen\", \"totalLiters\" : 8776}}"));
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findById(ID);
         verify(ingredientRepository, Mockito.times(1)).findById(ID);
         verify(beerRepository, Mockito.times(1)).save(save);
@@ -204,7 +192,6 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testUpdatedLitersBeerInStockIsBadRequest() throws Exception {
         // given
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalBeer());
         given(ingredientRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalIngredient());
         final String token = signIn(MANAGER);
@@ -214,7 +201,6 @@ class BeerControllerTest extends AbstractControllerTest {
                 .content("{\"idBeer\" : 3, \"liters\" : 2147483647}"))
                 // then
                 .andExpect(status().isBadRequest());
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findById(ID);
         verify(ingredientRepository, Mockito.times(1)).findById(ID);
     }
@@ -222,7 +208,6 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testGetBeerListIsEmpty() throws Exception {
         // given
-        given(userRepository.findAllByEmail("vasya@email.com")).willReturn(ControllerMockData.getAuthNewConsumerEntity());
         given(beerRepository.findAll()).willReturn(List.of());
         final String token = signIn(MANAGER);
         // when
@@ -231,7 +216,6 @@ class BeerControllerTest extends AbstractControllerTest {
                 // then
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
-        verify(userRepository, Mockito.times(1)).findAllByEmail("vasya@email.com");
         verify(beerRepository, Mockito.times(1)).findAll();
     }
 }
