@@ -135,13 +135,11 @@ public class BeerService {
         }
     }
 
-    private BeerEntity getBeer(long id, List<BeerEntity> beerEntities) {
-        for (BeerEntity beer: beerEntities) {
-            if (beer.getId() == id) {
-                return beer;
-            }
-        }
-        return null;
+    private BeerEntity getBeer(final long id, List<BeerEntity> beerEntities) {
+        return beerEntities.stream()
+                .filter(beer -> beer.getId() == id)
+                .findFirst()
+                .get();
     }
 
     private void updatedBeer(final BeerEntity beerEntity, final Beer newBeer) {
@@ -156,7 +154,7 @@ public class BeerService {
         if (newBeer.getCostPrice() > 0) beerEntity.setCostPrice(newBeer.getCostPrice());
 
         if (newBeer.getRecipe() != null) {
-            RecipeEntity recipeEntity = recipeMapper.sourceToDestination(newBeer.getRecipe());
+            final RecipeEntity recipeEntity = recipeMapper.sourceToDestination(newBeer.getRecipe());
             recipeRepository.save(recipeEntity);
             beerEntity.setRecipe(recipeEntity);
         }

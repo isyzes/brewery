@@ -34,6 +34,7 @@ class AuthControllerTest extends AbstractControllerTest {
         final AuthInfoEntity mockAuthInfo = createAuthInfo(CONSUMER, mockUser);
         given(userRepository.save(mockUser)).willReturn(mockUser);
         given(authInfoRepository.save(mockAuthInfo)).willReturn(mockAuthInfo);
+
         AuthInfoEntity entity = new AuthInfoEntity();
         entity.setLogin("vasya@email.com");
         entity.setPassword(passwordEncoder.encode("qwerty"));
@@ -64,7 +65,7 @@ class AuthControllerTest extends AbstractControllerTest {
                         "  \"email\" : \"vasya@email.com\",\n" +
                         "  \"password\" : \"qwerty\",\n" +
                         "  \"fio\" : \"Пупкин Василий Иванович\",\n" +
-                        "  \"birthDate\" : \"19.01.1995\",\n" +
+                        "  \"birthDate\" : \"19.01.1995\"\n" +
                         "}"))
                 // then
                 .andExpect(status().isBadRequest());

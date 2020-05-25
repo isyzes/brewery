@@ -70,9 +70,9 @@ public class IngredientService {
     }
 
     private IngredientEntity getIngredient(final long id, final List<IngredientEntity> ingredientEntities) {
-        for (IngredientEntity ingredient: ingredientEntities) {
-            if (ingredient.getId() == id) return ingredient;
-        }
-        return null;
+        return ingredientEntities.stream()
+                .filter(ingredient -> ingredient.getId() == id)
+                .findFirst()
+                .get();
     }
 }

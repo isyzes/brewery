@@ -6,10 +6,12 @@ import com.example.demo.dto.authentication.UserSignUpRequest;
 import com.example.demo.entity.AuthInfoEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.exception.SuchUserAlreadyExistException;
+import com.example.demo.exception.SuchUserNotFoundException;
 import com.example.demo.mapper.EmployeeSignUpRequestMapper;
 import com.example.demo.repository.AuthInfoRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtUtil;
+import com.example.demo.security.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -34,24 +37,31 @@ public class AuthService {
     private final EmployeeSignUpRequestMapper employeeSignUpRequestMapper;
 
     @Transactional
-    public UserSignInResponse signIn(final UserSignInRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    public UserSignInResponse signIn(final UserSignInRequest request) throws SuchUserNotFoundException {
+        final String email = request.getEmail();
+        final String password = request.getPassword();
+        final Optional<AuthInfoEntity> optional = getAuthInfoByLogin(email);
 
-        final Optional<AuthInfoEntity> optional = authInfoRepository.findByLogin(request.getEmail());
-        final AuthInfoEntity userEntity = optional.orElse(null);
+        if (optional.isPresent()) {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            final AuthInfoEntity authInfoEntity = optional.get();
+            return getToken(email, password, authInfoEntity.getRoles());
+        }
 
-        assert userEntity != null;
-        return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), userEntity.getRoles())));
+        throw new SuchUserNotFoundException("User with email=" + email + " not found!");
     }
 
     @Transactional
     public UserSignInResponse signUp(final UserSignUpRequest request) throws SuchUserAlreadyExistException {
-        if (authInfoRepository.findByLogin(request.getEmail()).isPresent()) {
-            throw new SuchUserAlreadyExistException("User with email=" + request.getEmail() + " already exists");
-        }
-        saveUser(request);
+        final String email = request.getEmail();
+        final String password = request.getPassword();
 
-        return new UserSignInResponse(jwtUtil.generateToken(new User(request.getEmail(), request.getPassword(), Collections.singleton(CONSUMER))));
+        if (getAuthInfoByLogin(email).isPresent()) {
+            throw new SuchUserAlreadyExistException("User with email=" + request.getEmail() + " already exists");
+        } else {
+            saveUser(request);
+            return getToken(email, password);
+        }
     }
 
     private void saveUser(final UserSignUpRequest request) {
@@ -68,4 +78,21 @@ public class AuthService {
         authInfoEntity.setRoles(Collections.singleton(CONSUMER));
         authInfoRepository.save(authInfoEntity);
     }
+
+    private String generateToken(final String email, final String password, final Collection<Roles> roles) {
+        return jwtUtil.generateToken(new User(email, password, roles));
+    }
+
+    private UserSignInResponse getToken(final String email, final String password) {
+        return new UserSignInResponse(generateToken(email, password, Collections.singleton(CONSUMER)));
+    }
+
+    private UserSignInResponse getToken(final String email, final String password, final Collection<Roles> roles) {
+        return new UserSignInResponse(generateToken(email, password, roles));
+    }
+
+    private Optional<AuthInfoEntity> getAuthInfoByLogin(final String email) {
+        return authInfoRepository.findByLogin(email);
+    }
+
 }

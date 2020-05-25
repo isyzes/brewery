@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.exception.BreweryIngredientException;
-import com.example.demo.exception.BreweryBeerException;
-import com.example.demo.exception.BreweryUpdatedBeerException;
-import com.example.demo.exception.SuchUserAlreadyExistException;
+import com.example.demo.exception.*;
 import lombok.Data;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -18,17 +15,21 @@ import java.util.logging.Level;
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler(
-            {BreweryIngredientException.class, BreweryBeerException.class, SuchUserAlreadyExistException.class,
-                    UsernameNotFoundException.class, BreweryUpdatedBeerException.class})
+    @ExceptionHandler({BreweryIngredientException.class, BreweryBeerException.class, SuchUserAlreadyExistException.class,
+            UsernameNotFoundException.class, BreweryUpdatedBeerException.class})
     private ResponseEntity<ErrorMessage> handleBadRequest(final Exception e) {
         log.log(Level.SEVERE, e.getMessage(), e);
         return new ResponseEntity<>(new ErrorMessage(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({SuchUserNotFoundException.class})
+    private ResponseEntity<ErrorMessage> handleForbidden(final Exception e) {
+        log.log(Level.SEVERE, e.getMessage(), e);
+        return new ResponseEntity<>(new ErrorMessage(e.getMessage()), HttpStatus.FORBIDDEN);
+    }
+
     @Data
     public static class ErrorMessage {
-
         private final String errorMessage;
     }
 }

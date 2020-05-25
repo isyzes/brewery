@@ -218,7 +218,7 @@ public class ControllerMockData {
         return beerEntity;
     }
 
-    private static RecipeEntity getRecipeEntity() {
+    public static RecipeEntity getRecipeEntity() {
         RecipeEntity recipeEntity = new RecipeEntity();
         recipeEntity.setId(ID);
         recipeEntity.setItems(List.of(getNewPartRecipeEntity()));

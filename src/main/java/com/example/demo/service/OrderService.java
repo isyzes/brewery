@@ -66,12 +66,10 @@ public class OrderService {
     }
 
     private BeerEntity getBeer(final long id, final List<BeerEntity> beerEntities) {
-        for (BeerEntity beer: beerEntities) {
-            if (beer.getId() == id) {
-                return beer;
-            }
-        }
-        return null;
+        return beerEntities.stream()
+                .filter(beer -> beer.getId() == id)
+                .findFirst()
+                .get();
     }
 }
 

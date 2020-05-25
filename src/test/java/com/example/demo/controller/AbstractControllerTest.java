@@ -49,6 +49,8 @@ public abstract class AbstractControllerTest {
     protected UserRepository userRepository;
     @MockBean
     protected OrderItemRepository orderItemRepository;
+    @MockBean
+    protected RecipeRepository recipeRepository;
 
 
     protected String signIn(Roles roles) throws Exception {

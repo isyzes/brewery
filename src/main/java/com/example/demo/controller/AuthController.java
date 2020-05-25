@@ -4,6 +4,7 @@ import com.example.demo.dto.authentication.UserSignInRequest;
 import com.example.demo.dto.authentication.UserSignInResponse;
 import com.example.demo.dto.authentication.UserSignUpRequest;
 import com.example.demo.exception.SuchUserAlreadyExistException;
+import com.example.demo.exception.SuchUserNotFoundException;
 import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/sign-in", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UserSignInResponse signIn(@RequestBody final UserSignInRequest request) {
+    public UserSignInResponse signIn(@RequestBody final UserSignInRequest request) throws SuchUserNotFoundException {
         return authService.signIn(request);
     }
 }
