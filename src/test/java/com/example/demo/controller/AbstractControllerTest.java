@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.authentication.UserSignInResponse;
 import com.example.demo.entity.AuthInfoEntity;
-import com.example.demo.entity.UserEntity;
+import com.example.demo.mockdata.ControllerMockData;
 import com.example.demo.repository.*;
 import com.example.demo.security.Roles;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,11 +12,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasLength;
@@ -29,14 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:application-test.properties")
-public abstract class AbstractControllerTest {
-    protected final static long ID = 3;
+public abstract class AbstractControllerTest extends ControllerMockData {
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper objectMapper;
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
     @MockBean
     protected AuthInfoRepository authInfoRepository;
     @MockBean
@@ -52,12 +47,8 @@ public abstract class AbstractControllerTest {
     @MockBean
     protected RecipeRepository recipeRepository;
 
-
     protected String signIn(Roles roles) throws Exception {
-        AuthInfoEntity infoEntity = new AuthInfoEntity();
-        infoEntity.setLogin("vasya@email.com");
-        infoEntity.setPassword(passwordEncoder.encode("qwerty"));
-        infoEntity.setRoles(Collections.singleton(roles));
+        final AuthInfoEntity infoEntity = createAuthInfo(roles);
 
         given(authInfoRepository.findByLogin("vasya@email.com")).willReturn(Optional.of(infoEntity));
 
@@ -76,24 +67,4 @@ public abstract class AbstractControllerTest {
 
         return "Bearer " + objectMapper.readValue(response, UserSignInResponse.class).getToken();
     }
-
-    protected AuthInfoEntity createAuthInfo(Roles roles) {
-        final UserEntity user = new UserEntity();
-        user.setEmail("vasya@email.com");
-
-        final AuthInfoEntity authInfo = new AuthInfoEntity();
-        authInfo.setLogin(user.getEmail());
-        authInfo.setPassword(passwordEncoder.encode("qwerty"));
-        authInfo.setUser(user);
-        authInfo.setRoles(Collections.singleton(roles));
-        return authInfo;
-    }
-
-    protected AuthInfoEntity createAuthInfo(Roles roles, UserEntity user) {
-        final AuthInfoEntity authInfo =createAuthInfo(roles);
-        authInfo.setRoles(Collections.singleton(roles));
-        authInfo.setUser(user);
-        return authInfo;
-    }
-
 }

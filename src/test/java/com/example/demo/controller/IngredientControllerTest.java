@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.IngredientEntity;
-import com.example.demo.mockdata.ControllerMockData;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,8 +23,8 @@ class IngredientControllerTest extends AbstractControllerTest {
     @Test
     void testBuyIngredientIsOk() throws Exception {
         // given
-        final IngredientEntity save = ControllerMockData.getNewIngredient(650402);
-        given(ingredientRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalIngredient());
+        final IngredientEntity save = getIngredient(650402);
+        given(ingredientRepository.findById(ID)).willReturn(getOptionalIngredient());
         given(ingredientRepository.save(save)).willReturn(save);
         final String token = signIn(MANAGER);
         // when
@@ -35,7 +34,7 @@ class IngredientControllerTest extends AbstractControllerTest {
                 // then
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"idIngredient\":3,\"totalMilligramsInStock\":650402}"));
-        verify(ingredientRepository, Mockito.times(1)).findById(3L);
+        verify(ingredientRepository, Mockito.times(1)).findById(ID);
         verify(ingredientRepository, Mockito.times(1)).save(save);
     }
 

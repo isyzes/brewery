@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.UserEntity;
-import com.example.demo.mockdata.ControllerMockData;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,8 +23,8 @@ class EmployeeControllerTest extends AbstractControllerTest {
     @Test
     void testEmployeeTakeIsOk() throws Exception {
         // given
-        final UserEntity request = ControllerMockData.getNewEmployeeRequestEntity();
-        final UserEntity response = ControllerMockData.getNewEmployeeResponseEntity();
+        final UserEntity request = getEmployeeEntityForRequest();
+        final UserEntity response = getEmployeeEntityForResponse();
         given(userRepository.save(request)).willReturn(response);
         final String token = signIn(MANAGER);
         // when
@@ -43,8 +42,8 @@ class EmployeeControllerTest extends AbstractControllerTest {
     @Test
     void testEmployeeToDismissIsOk() throws Exception {
         // given
-        final UserEntity save = ControllerMockData.getAuthNewEmployeeToDismiss();
-        given(userRepository.findById(ID)).willReturn(ControllerMockData.getOptionalEmployeeEntity());
+        final UserEntity save = getUserEntityToDismiss();
+        given(userRepository.findById(ID)).willReturn(getOptionalEmployeeEntity());
         given(userRepository.save(save)).willReturn(save);
         final String token = signIn(MANAGER);
         // when
@@ -60,7 +59,7 @@ class EmployeeControllerTest extends AbstractControllerTest {
     void testGetStaffListIsOk() throws Exception {
         // given
         final String token = signIn(MANAGER);
-        given(authInfoRepository.findByRoles(EMPLOYEE)).willReturn(ControllerMockData.getAuthInfoEntity());
+        given(authInfoRepository.findByRoles(EMPLOYEE)).willReturn(getAuthInfoEntityList());
         // when
         mockMvc.perform(get("/staff/list").header("Authorization", token))
                 // then

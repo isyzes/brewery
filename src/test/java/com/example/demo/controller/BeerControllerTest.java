@@ -4,7 +4,6 @@ import com.example.demo.entity.BeerEntity;
 import com.example.demo.entity.OrderEntity;
 import com.example.demo.entity.OrderItemEntity;
 import com.example.demo.entity.RecipeEntity;
-import com.example.demo.mockdata.ControllerMockData;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,7 +28,7 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testGetBeersIsOk() throws Exception {
         // given
-        given(beerRepository.findAll()).willReturn(ControllerMockData.getBeerEntityList());
+        given(beerRepository.findAll()).willReturn(getBeerEntityList());
         // when
         final String token = signIn(CONSUMER);
         mockMvc.perform(get("/beers/list").header("Authorization", token)
@@ -73,9 +72,9 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testUpdatedBeerIsOk() throws Exception {
         // given
-        final BeerEntity save = ControllerMockData.getResponseUpdatedBeer();
-        final RecipeEntity saveRecipe = ControllerMockData.getRecipeEntity();
-        given(beerRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalBeer());
+        final BeerEntity save = getBeerEntity();
+        final RecipeEntity saveRecipe = getRecipeEntity();
+        given(beerRepository.findById(ID)).willReturn(getOptionalBeer());
         given(recipeRepository.save(saveRecipe)).willReturn(saveRecipe);
         given(beerRepository.save(save)).willReturn(save);
         final String token = signIn(MANAGER);
@@ -116,13 +115,14 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testBuyBeerIsOk() throws Exception {
         // given
-        final BeerEntity firstSaveBeer = ControllerMockData.getSaveBeer(3, 6225- 5);
-        final BeerEntity secondSaveBeer = ControllerMockData.getSaveBeer(4, 6225- 4);
-        final OrderItemEntity firstSaveItem = ControllerMockData.getNewOrderItemEntity(firstSaveBeer, 5);
-        final OrderItemEntity secondSaveItem = ControllerMockData.getNewOrderItemEntity(secondSaveBeer, 4);
-        final OrderEntity save = ControllerMockData.getSaveOrderEntity(firstSaveItem, secondSaveItem);
-        given(beerRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalBeer(3));
-        given(beerRepository.findById(4L)).willReturn(ControllerMockData.getNewOptionalBeer(4));
+        final BeerEntity firstSaveBeer = getSaveBeerEntity(3, 6225- 5);
+        final BeerEntity secondSaveBeer = getSaveBeerEntity(4, 6225- 4);
+        final OrderItemEntity firstSaveItem = getOrderItemEntity(firstSaveBeer, 5);
+        final OrderItemEntity secondSaveItem = getOrderItemEntity(secondSaveBeer, 4);
+        final OrderEntity save = getOrderEntity(firstSaveItem, secondSaveItem);
+
+        given(beerRepository.findById(3L)).willReturn(getOptionalBeer(3));
+        given(beerRepository.findById(4L)).willReturn(getOptionalBeer(4));
         given(beerRepository.save(firstSaveBeer)).willReturn(firstSaveBeer);
         given(beerRepository.save(secondSaveBeer)).willReturn(secondSaveBeer);
         given(orderItemRepository.save(firstSaveItem)).willReturn(firstSaveItem);
@@ -140,7 +140,7 @@ class BeerControllerTest extends AbstractControllerTest {
                 // then
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{" +
-                        "\"price\":26.28," +
+                        "\"price\":102.04," +
                         "\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
                         "\"items\":[" +
                             "{\"beer\":{\"id\":3, \"name\":\"Grimbergen\"},\"liters\":5}," +
@@ -158,8 +158,8 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testBuyBeerIsBadRequest() throws Exception {
         // given
-        given(beerRepository.findById(3L)).willReturn(ControllerMockData.getNewOptionalBeer(3L));
-        given(beerRepository.findById(4L)).willReturn(ControllerMockData.getNewOptionalBeer(4L));
+        given(beerRepository.findById(3L)).willReturn(getOptionalBeer(3L));
+        given(beerRepository.findById(4L)).willReturn(getOptionalBeer(4L));
         final String token = signIn(CONSUMER);
         // when
         mockMvc.perform(post("/beers/buy").header("Authorization", token)
@@ -177,9 +177,9 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testUpdatedLitersBeerInStockIsOk() throws Exception {
         // given
-        final BeerEntity save = ControllerMockData.getSaveBeer();
-        given(beerRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalBeer());
-        given(ingredientRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalIngredient());
+        final BeerEntity save = getSaveBeerEntity();
+        given(beerRepository.findById(ID)).willReturn(getOptionalBeer());
+        given(ingredientRepository.findById(ID)).willReturn(getOptionalIngredient());
         given(beerRepository.save(save)).willReturn(save);
         final String token = signIn(MANAGER);
         // when
@@ -197,8 +197,8 @@ class BeerControllerTest extends AbstractControllerTest {
     @Test
     void testUpdatedLitersBeerInStockIsBadRequest() throws Exception {
         // given
-        given(beerRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalBeer());
-        given(ingredientRepository.findById(ID)).willReturn(ControllerMockData.getNewOptionalIngredient());
+        given(beerRepository.findById(ID)).willReturn(getOptionalBeer());
+        given(ingredientRepository.findById(ID)).willReturn(getOptionalIngredient());
         final String token = signIn(MANAGER);
         // when
         mockMvc.perform(put("/beers/updated").header("Authorization", token)
