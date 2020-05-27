@@ -22,9 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.demo.security.Roles.CONSUMER;
+import static com.example.demo.security.Roles.EMPLOYEE;
 
 @Service
 @AllArgsConstructor
@@ -95,4 +97,7 @@ public class AuthService {
         return authInfoRepository.findByLogin(email);
     }
 
+    public List<AuthInfoEntity> getStaff() {
+        return authInfoRepository.findByRoles(EMPLOYEE);
+    }
 }

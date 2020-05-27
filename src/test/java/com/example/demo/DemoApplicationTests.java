@@ -17,13 +17,4 @@ class DemoApplicationTests extends AbstractControllerTest {
     @Test
     void contextLoads() {
     }
-
-    @Test
-    void welcome() throws Exception {
-        mockMvc.perform(get("/index")
-                .contentType(MediaType.APPLICATION_JSON))
-
-                .andExpect(status().isOk())
-                .andExpect(content().string("Welcome!"));
-    }
 }

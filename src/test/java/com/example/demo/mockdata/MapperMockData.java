@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static com.example.demo.security.Roles.EMPLOYEE;
 
-public class ControllerMockData {
+public class MapperMockData {
     private final static long ID = 3;
 
     public static Optional<BeerEntity> getNewOptionalBeer() {
@@ -196,6 +196,17 @@ public class ControllerMockData {
 
     public static UserEntity getAuthNewConsumerEntity() {
         final UserEntity userEntity = new UserEntity();
+        userEntity.setEmail("vasya@email.com");
+        userEntity.setBirthDate(LocalDate.of(1995, 1, 19));
+        userEntity.setFio("Пупкин Василий Иванович");
+        return userEntity;
+    }
+
+    public static UserEntity getAuthNewConsumerEntityForConvert() {
+        final UserEntity userEntity = new UserEntity();
+        userEntity.setId(ID);
+        userEntity.setDateStart(LocalDate.of(2018, 1,15));
+        userEntity.setDateEnd(LocalDate.of(2019,10,14));
         userEntity.setEmail("vasya@email.com");
         userEntity.setBirthDate(LocalDate.of(1995, 1, 19));
         userEntity.setFio("Пупкин Василий Иванович");

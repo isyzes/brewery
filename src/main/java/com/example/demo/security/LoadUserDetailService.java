@@ -19,11 +19,7 @@ public class LoadUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         final Optional<AuthInfoEntity> optional = repository.findByLogin(email);
-
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-
-        throw new UsernameNotFoundException("User with email: " + email + " not found");
+        return optional.orElse(null);
+        //throw new UsernameNotFoundException("User with email: " + email + " not found");
     }
 }

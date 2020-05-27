@@ -60,7 +60,7 @@ class EmployeeControllerTest extends AbstractControllerTest {
     void testGetStaffListIsOk() throws Exception {
         // given
         final String token = signIn(MANAGER);
-        given(userRepository.findAllByUserRole(EMPLOYEE)).willReturn(ControllerMockData.getEmployeeEntities());
+        given(authInfoRepository.findByRoles(EMPLOYEE)).willReturn(ControllerMockData.getAuthInfoEntity());
         // when
         mockMvc.perform(get("/staff/list").header("Authorization", token))
                 // then
@@ -93,6 +93,6 @@ class EmployeeControllerTest extends AbstractControllerTest {
                             "\"dateEnd\":\"14.10.2019\"," +
                             "\"works\":false" +
                         "}]"));
-        verify(userRepository, Mockito.times(1)).findAllByUserRole(EMPLOYEE);
+        verify(authInfoRepository, Mockito.times(1)).findByRoles(EMPLOYEE);
     }
 }
