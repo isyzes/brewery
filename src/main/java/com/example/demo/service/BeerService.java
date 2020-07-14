@@ -7,9 +7,7 @@ import com.example.demo.dto.order.OrderItem;
 import com.example.demo.dto.order.RequestOrder;
 import com.example.demo.dto.order.ResponseOrder;
 import com.example.demo.dto.recipe.RecipeItem;
-import com.example.demo.entity.BeerEntity;
-import com.example.demo.entity.IngredientEntity;
-import com.example.demo.entity.RecipeEntity;
+import com.example.demo.entity.*;
 import com.example.demo.exception.BreweryBeerException;
 import com.example.demo.exception.BreweryIngredientException;
 import com.example.demo.exception.BreweryUpdatedBeerException;
@@ -98,12 +96,12 @@ public class BeerService {
     }
 
     @Transactional
-    public ResponseOrder createOrder(final RequestOrder requestOrder) throws BreweryBeerException {
+    public ResponseOrder createOrder(final RequestOrder requestOrder, final AuthInfoEntity authInfoEntity) throws BreweryBeerException {
         final List<BeerEntity> beersOfOrders = beersOfOrders(requestOrder.getItems());
 
         if (!beersOfOrders.isEmpty()) {
             updatedLitersInStock(requestOrder.getItems(), beersOfOrders);
-            return orderService.createOrder(requestOrder, beersOfOrders);
+            return orderService.createOrder(requestOrder, beersOfOrders, authInfoEntity.getUser());
         } else {
             managerService.needBeer();
             throw new BreweryBeerException("Not enough beer in stock!");

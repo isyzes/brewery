@@ -132,7 +132,7 @@ class BeerControllerTest extends AbstractControllerTest {
         // when
         mockMvc.perform(post("/beers/buy").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
+                .content("{" +
                         "\"items\":[" +
                             "{\"beer\":{\"id\" : 3}, \"liters\":5}," +
                             "{\"beer\":{\"id\" : 4}, \"liters\":4}" +
@@ -141,7 +141,6 @@ class BeerControllerTest extends AbstractControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{" +
                         "\"price\":102.04," +
-                        "\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
                         "\"items\":[" +
                             "{\"beer\":{\"id\":3, \"name\":\"Grimbergen\"},\"liters\":5}," +
                             "{\"beer\":{\"id\":4, \"name\":\"Grimbergen\"},\"liters\":4}" +
@@ -164,7 +163,7 @@ class BeerControllerTest extends AbstractControllerTest {
         // when
         mockMvc.perform(post("/beers/buy").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"consumer\":{\"id\":4,\"fio\": \"Easy Pub\"}," +
+                .content("{" +
                         "\"items\":[" +
                         "{\"beer\":{\"id\" : 3}, \"liters\":5435235}," +
                         "{\"beer\":{\"id\" : 4}, \"liters\":9234344}" +

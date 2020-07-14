@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                            http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+
+
+    <changeSet id="*" author="Dima">
+        <insert tableName="ingredient">
+            <column name="id" valueNumeric="54" />
+            <column name="name" value="Water" />
+            <column name="milligrams_in_stock" valueNumeric="954752" />
+        </insert>
+
+        <insert tableName="recipe">
+            <column name="id" valueNumeric="97"/>
+        </insert>
+
+        <insert tableName="recipe_item">
+            <column name="id" valueNumeric="98"/>
+            <column name="ingredient_id" valueNumeric="54"/>
+            <column name="milligram" valueNumeric="5978"/>
+            <column name="recipe_id" valueNumeric="97"/>
+        </insert>
+
+        <insert tableName="beer">
+            <column name="id" valueNumeric="887"/>
+            <column name="name" value="Garage"/>
+            <column name="color" value="bright"/>
+            <column name="fortress" valueNumeric="12.5"/>
+            <column name="shelf_life" valueNumeric="25"/>
+            <column name="cost_price" valueNumeric="987"/>
+            <column name="recipe_id" valueNumeric="97" />
+            <column name="liters_in_stock" valueNumeric="10000"/>
+        </insert>
+
+        <insert tableName="beer">
+            <column name="id" valueNumeric="888"/>
+            <column name="name" value="Miller"/>
+            <column name="color" value="bright"/>
+            <column name="fortress" valueNumeric="12.5"/>
+            <column name="shelf_life" valueNumeric="25"/>
+            <column name="cost_price" valueNumeric="987"/>
+            <column name="recipe_id" valueNumeric="97" />
+            <column name="liters_in_stock" valueNumeric="10000"/>
+        </insert>
+
+        <insert tableName="beer">
+            <column name="id" valueNumeric="889"/>
+            <column name="name" value="Heineken"/>
+            <column name="color" value="bright"/>
+            <column name="fortress" valueNumeric="12.5"/>
+            <column name="shelf_life" valueNumeric="25"/>
+            <column name="cost_price" valueNumeric="987"/>
+            <column name="recipe_id" valueNumeric="97" />
+            <column name="liters_in_stock" valueNumeric="10000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_admin" author="Dima">
+        <insert tableName="auth_info">
+            <column name="id" valueNumeric="1" />
+            <column name="login" value="admin@email.com"/>
+            <column name="password" value="$2y$04$rywHN..YrIT1D6TOckyI9eVF3q2WEzut/pFIX/t9Q.90WAbXTfdkO" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_admin_role" author="Dima">
+        <insert tableName="user_role">
+            <column name="user_id" value="1"/>
+            <column name="roles" value="MANAGER"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

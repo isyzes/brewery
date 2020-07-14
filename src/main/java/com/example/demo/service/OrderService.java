@@ -6,6 +6,7 @@ import com.example.demo.dto.order.ResponseOrder;
 import com.example.demo.entity.BeerEntity;
 import com.example.demo.entity.OrderEntity;
 import com.example.demo.entity.OrderItemEntity;
+import com.example.demo.entity.UserEntity;
 import com.example.demo.mapper.OrderItemMapper;
 import com.example.demo.mapper.RequestOrderMapper;
 import com.example.demo.mapper.ResponseOrderMapper;
@@ -29,11 +30,12 @@ public class OrderService {
     private final ResponseOrderMapper responseOrderMapper;
     private final OrderItemMapper orderItemMapper;
 
-    public ResponseOrder createOrder(final RequestOrder requestOrder, final List<BeerEntity> beerEntities) {
+    public ResponseOrder createOrder(final RequestOrder requestOrder, final List<BeerEntity> beerEntities, final UserEntity consumer) {
         final OrderEntity orderEntity = requestOrderMapper.sourceToDestination(requestOrder);
         final double totalPrice = getTotalPrice(requestOrder.getItems(), beerEntities);
         orderEntity.setPrice(totalPrice);
         orderEntity.setItems(getOrderItemEntity(requestOrder.getItems(), beerEntities));
+        orderEntity.setConsumer(consumer);
         orderRepository.save(orderEntity);
 
         return responseOrderMapper.destinationToSource(orderEntity);

@@ -58,6 +58,14 @@
     </changeSet>
 
     <changeSet id="5" author="Dima">
+        <createTable tableName="recipe">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="Dima">
         <createTable tableName="recipe_item">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -66,14 +74,8 @@
                 <constraints foreignKeyName="fk_recipe_item_ingredient" references="ingredient(id)" />
             </column>
             <column name="milligram" type="INT UNSIGNED"/>
-            <column name="beer_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="6" author="Dima">
-        <createTable tableName="recipe">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="recipe_id" type="BIGINT">
+                <constraints foreignKeyName="fk_recipe_item_recipe" references="recipe(id)"/>
             </column>
         </createTable>
     </changeSet>
@@ -102,7 +104,9 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="price" type="DECIMAL"/>
-            <column name="user_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_order_entity_user" references="user(id)"/>
+            </column>
         </createTable>
     </changeSet>
 

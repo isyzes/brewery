@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.Employee;
 import com.example.demo.dto.authentication.UserSignInRequest;
 import com.example.demo.dto.authentication.UserSignInResponse;
 import com.example.demo.dto.authentication.UserSignUpRequest;
@@ -99,5 +100,14 @@ public class AuthService {
 
     public List<AuthInfoEntity> getStaff() {
         return authInfoRepository.findByRoles(EMPLOYEE);
+    }
+
+    public void saveEmployee(final UserEntity userEntity) {
+        final AuthInfoEntity authInfoEntity = new AuthInfoEntity();
+        authInfoEntity.setLogin(userEntity.getEmail());
+        authInfoEntity.setPassword(passwordEncoder.encode("12345"));
+        authInfoEntity.setUser(userEntity);
+        authInfoEntity.setRoles(Collections.singleton(EMPLOYEE));
+        authInfoRepository.save(authInfoEntity);
     }
 }

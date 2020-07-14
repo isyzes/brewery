@@ -122,6 +122,7 @@ public class ControllerMockData {
         final UserEntity userEntity = new UserEntity();
         userEntity.setId(4L);
         userEntity.setFio("Easy Pub");
+        userEntity.setEmail("vasya@email.com");
 
         orderEntity.setPrice(102.04);
         orderEntity.setItems(List.of(firstSaveItem, secondSaveItem));
@@ -223,6 +224,8 @@ public class ControllerMockData {
     protected AuthInfoEntity createAuthInfo(final Roles roles) {
         final UserEntity user = new UserEntity();
         user.setEmail("vasya@email.com");
+        user.setId(4L);
+        user.setFio("Easy Pub");
 
         final AuthInfoEntity authInfo = new AuthInfoEntity();
         authInfo.setLogin(user.getEmail());

@@ -27,6 +27,7 @@ public class UserService {
         employeeEntity.setWorks(true);
         employeeEntity.setDateStart(LocalDate.now());
         userRepository.save(employeeEntity);
+        authService.saveEmployee(employeeEntity);
         return employee;
     }
 
